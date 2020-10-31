@@ -1,10 +1,11 @@
 ---
 layout: page
+toc: true
 title: Curriculum Vitae
 permalink: /curriculum/
 ---
 
-My Curriculum Vitae is provided below in MarkDown, but I am also making it available in PDF format in the link below.
+My Curriculum Vitae is provided below in Markdown.
 
 <span style="color:blue">**Personal Information**</span>
 
@@ -41,15 +42,23 @@ My Curriculum Vitae is provided below in MarkDown, but I am also making it avail
 
 <span style="color:blue">**Languages**</span>
 
-* Portuguese - native
-* Spanish - C2
-* French - C2 (conferred C2 by TCF Tout Public)
-* Italian - A2
-* English - C2 (conferred C2 by Toefl iBT - Score: 117)
-* German - C2 ( conferred )
+| Language | Proficiency |
+|-|-|
+| Portuguese | Native |
+|-|-|
+| Spanish | C2 |
+|-|-|
+| French | C2 (conferred TCF Tout Public) |
+|-|-|
+| Italian | A2 |
+|-|-|
+| English | C2 (TOEFL iBT - Score: 117) |
+|-|-|
+| German | C2 (conferred by TestDaF)
+|-|-|
+| Russian | A1 |
 
+A PDF copy of my curriculum is available <a href="http:\\pbranco.com\_pages\docs\Paulo_Branco__s_CV.pdf">here</a>.
 
-My curriculum is available in PDF format <a href="http:\\pbranco.com\_pages\docs\Paulo_Branco__s_CV.pdf">here</a>.
-
-Your Webhost,
+Your Webhost,  
 Paulo Branco

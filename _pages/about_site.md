@@ -13,5 +13,5 @@ This page also contains data about me, including a page dedicated to my Curricul
 
 Last but not least, this webpage will also serve to showcase all my Data Science and Machine Learning projects. It will function as a "repo" of sorts. It will be not code-heavy (the code specifics will be available on my github page). It will contan though a walk-through of what I have done in Jupyter Notebook format.
 
-Your Webhost,  
+Your Webhost,    
 Paulo Branco
