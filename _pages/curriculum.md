@@ -6,7 +6,6 @@ permalink: /curriculum/
 
 My Curriculum Vitae is provided below in MarkDown, but I am also making it available in PDF format in the link below.
 
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
