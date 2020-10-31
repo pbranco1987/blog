@@ -6,9 +6,10 @@ permalink: /curriculum/
 
 My Curriculum Vitae is provided below in MarkDown, but I am also making it available in PDF format in the link below.
 
-# Personal Information
+<span style="color:blue">some **Personal Information** text</span>
 
 * Name: Paulo Ricardo Branco da Silva
+* Civil Status: Single
 * Date of Birth: 02/09/1987
 * Residential Address: Rua Alba Dias Cunha, 100, apto. 31
 * City: Santo André, Brazil
@@ -16,21 +17,40 @@ My Curriculum Vitae is provided below in MarkDown, but I am also making it avail
 
 <br>
 
-# <span font-size:4em;">Professional Experience</span>
+<span style="color:blue">some **Professional Experience** text</span>
 
 * University Vector Calculus Professor at Uniasselvi
 * Lab Assistant at Instituto Mauá de Tecnologia
-* TEst
-* Internship Siemens
+* Internship as Telecommunications Engineer at Invensys
+* Internship as PLC Engineer at Siemens
 
 
-# <span font-size:4em;">Education</span>
+<span style="color:blue">some **Education** text</span>
 
-# <span font-size:4em;">Skills and Expertise</span>
+* Ph.D. in Information Theory at the Universidade Federal de Santa Catarina (UFSC)
+  * Research internship in Imperial College London
+* Master's in Information Theory at the Universidade Federal de Santa Catarina (UFSC)
+* Bachelor's in Electrical Engineering majoring in Electronics at Instituto Mauá de Tecnologia (IMT)
 
-# <span font-size:4em;">Languages</span>
+<span style="color:blue">some **Skills and Expertise** text</span>
 
-<a href="http://www.pdf995.com/samples/pdf.pdf">My Curriculum Vitae (pdf version)</a>
+* Programming: C, Python, Java, R, MATLAB
+* Webpage Development
+
+<span style="color:blue">some **Academic Articles Published** text</span>
+
+<span style="color:blue">some **Languages** text</span>
+
+* Portuguese - native
+* Spanish - C2
+* French - C2 (conferred C2 by TCF Tout Public)
+* Italian - A2
+* English - C2 (conferred C2 by Toefl iBT - Score: 117)
+* German - C2 ( conferred )
+
+
+My curriculum is available in PDF format <a href="docs/Paulo_Branco__s_CV.pdf">here</a>.
+
 
 Your Webhost,
 Paulo Branco
