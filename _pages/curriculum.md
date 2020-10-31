@@ -58,7 +58,7 @@ My Curriculum Vitae is provided below in Markdown.
 |-|-|
 | Russian | A1 |
 
-A PDF copy of my curriculum is available <a href="http:\\pbranco.com\_pages\docs\Paulo_Branco__s_CV.pdf">here</a>.
+A PDF copy of my curriculum is available <a href="http:\\prbranco.com\_pages\docs\Paulo_Branco__s_CV.pdf">here</a>.
 
 Your Webhost,  
 Paulo Branco
