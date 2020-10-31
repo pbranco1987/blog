@@ -53,7 +53,7 @@
   
       ,"page3": {
           "title": "Curriculum Vitae",
-          "content": "My Curriculum Vitae is provided below in MarkDown, but I am also making it available in PDF format in the link below. . PDF Example with iframe . . Your Webhost, Paulo Branco .",
+          "content": "My Curriculum Vitae is provided below in MarkDown, but I am also making it available in PDF format in the link below. . &lt;!DOCTYPE html&gt; . PDF Viewer . Prev Page Next Page Page of . Your Webhost, Paulo Branco .",
           "url": "https://www.prbranco.com/curriculum/",
           "relUrl": "/curriculum/",
           "date": ""
