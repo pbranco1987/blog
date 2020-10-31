@@ -1,4 +1,4 @@
-const url = '../docs/Paulo_Branco__s_CV.pdf';
+const url = 'http:\\prbranco.com\_pages\docs\Paulo_Branco__s_CV.pdf';
 
 let pdfDoc = null,
   pageNum = 1,
