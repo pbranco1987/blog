@@ -50,7 +50,10 @@ layout: default
       {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
       {%- for post in posts -%}
       <li>
-        <p class="solid">
+         <p {
+          border-style: dotted;
+          border-width: thick;
+         }>
           {%- if site.show_image -%}
               {%- include post_list_image_card.html -%}
           {% else %}
