@@ -1,5 +1,6 @@
 ---
 layout: page
+image: http:\\www.prbranco.com\logo.png
 title: About this Site
 permalink: /about_site/
 ---
@@ -10,7 +11,7 @@ Aside from that, I will dedicate a page to one of my side passions, which is to 
 
 This page also contains data about me, including a page dedicated to my Curriculum Vitae and a page with general information about my purpose in creating a website.
 
-Last but not least, this webpage will also serve to showcase all my Data Science and Machine Learning projects. It will function as a "repo" of sorts. It will be not code-heavy (the code specifics will be available on my github page). It will contan though a walk-through of what I have done in Jupyter Notebook format. 
+Last but not least, this webpage will also serve to showcase all my Data Science and Machine Learning projects. It will function as a "repo" of sorts. It will be not code-heavy (the code specifics will be available on my github page). It will contan though a walk-through of what I have done in Jupyter Notebook format.
 
 Your Webhost,  
 Paulo Branco
