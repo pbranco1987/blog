@@ -53,7 +53,7 @@
   
       ,"page3": {
           "title": "Curriculum Vitae",
-          "content": "My Curriculum Vitae is provided below in MarkDown, but I am also making it available in PDF format in the link below. . Personal Information . Name: Paulo Ricardo Branco da Silva | Date of Birth: 02/09/1987 | Residential Address: Rua Alba Dias Cunha, 100, apto. 31 | City: Santo André, Brazil | Mobile: +55 11 95585-5725 | . . Professional Experience . University Professor at Uniasselvi | Lab Assistant at Instituto Mauá de Tecnologia | TEst | Internship Siemens | . Education . Skills and Expertise . # . My Curriculum Vitae (pdf version) . Your Webhost, Paulo Branco .",
+          "content": "My Curriculum Vitae is provided below in MarkDown, but I am also making it available in PDF format in the link below. . Personal Information . Name: Paulo Ricardo Branco da Silva | Date of Birth: 02/09/1987 | Residential Address: Rua Alba Dias Cunha, 100, apto. 31 | City: Santo André, Brazil | Mobile: +55 11 95585-5725 | . . &lt;span font-size:4em;”&gt;Professional Experience&lt;/span&gt; . University Vector Calculus Professor at Uniasselvi | Lab Assistant at Instituto Mauá de Tecnologia | TEst | Internship Siemens | . &lt;span font-size:4em;”&gt;Education&lt;/span&gt; . &lt;span font-size:4em;”&gt;Skills and Expertise&lt;/span&gt; . &lt;span font-size:4em;”&gt;Languages&lt;/span&gt; . My Curriculum Vitae (pdf version) . Your Webhost, Paulo Branco .",
           "url": "https://www.prbranco.com/curriculum/",
           "relUrl": "/curriculum/",
           "date": ""
