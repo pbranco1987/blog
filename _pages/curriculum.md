@@ -6,7 +6,7 @@ permalink: /curriculum/
 
 My Curriculum Vitae is provided below in MarkDown, but I am also making it available in PDF format in the link below.
 
-<span style="color:blue">some **Personal Information** text</span>
+<span style="color:blue">**Personal Information**</span>
 
 * Name: Paulo Ricardo Branco da Silva
 * Civil Status: Single
@@ -49,8 +49,7 @@ My Curriculum Vitae is provided below in MarkDown, but I am also making it avail
 * German - C2 ( conferred )
 
 
-My curriculum is available in PDF format <a href="docs/Paulo_Branco__s_CV.pdf">here</a>.
-
+My curriculum is available in PDF format <a href="http:\\pbranco.com\_pages\docs\Paulo_Branco__s_CV.pdf">here</a>.
 
 Your Webhost,
 Paulo Branco
