@@ -17,7 +17,7 @@ My Curriculum Vitae is provided below in MarkDown, but I am also making it avail
 
 <br>
 
-<span style="color:blue">some **Professional Experience** text</span>
+<span style="color:blue">**Professional Experience**</span>
 
 * University Vector Calculus Professor at Uniasselvi
 * Lab Assistant at Instituto Mauá de Tecnologia
@@ -25,21 +25,21 @@ My Curriculum Vitae is provided below in MarkDown, but I am also making it avail
 * Internship as PLC Engineer at Siemens
 
 
-<span style="color:blue">some **Education** text</span>
+<span style="color:blue">**Education**</span>
 
 * Ph.D. in Information Theory at the Universidade Federal de Santa Catarina (UFSC)
   * Research internship in Imperial College London
 * Master's in Information Theory at the Universidade Federal de Santa Catarina (UFSC)
 * Bachelor's in Electrical Engineering majoring in Electronics at Instituto Mauá de Tecnologia (IMT)
 
-<span style="color:blue">some **Skills and Expertise** text</span>
+<span style="color:blue">**Skills and Expertise**</span>
 
 * Programming: C, Python, Java, R, MATLAB
 * Webpage Development
 
-<span style="color:blue">some **Academic Articles Published** text</span>
+<span style="color:blue">**Academic Articles Published** text</span>
 
-<span style="color:blue">some **Languages** text</span>
+<span style="color:blue">**Languages**</span>
 
 * Portuguese - native
 * Spanish - C2
