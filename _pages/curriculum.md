@@ -10,6 +10,8 @@ My Curriculum Vitae is provided below in Markdown.
 ![]({{ site.baseurl }}ppic.jpg "paulo")
 
 
+<span style="color:blue">**Personal Information**</span>
+
 * Name: Paulo Ricardo Branco da Silva
 * Civil Status: Single
 * Date of Birth: 02/09/1987
@@ -54,10 +56,24 @@ My Curriculum Vitae is provided below in Markdown.
 
 <hr>
 
-<span style="color:blue">**Skills and Expertise**</span>
+<span style="color:blue">**Skills**</span>
 
 * Programming: C, Python, Java, R, MATLAB
 * Webpage Development
+* Probability and statistics
+* Optimization
+  * Convex
+  * Linear Programming
+  * Genetic Algorithms
+* Machine learning
+* Data science
+  * SciKit Learn
+  * pyTorch
+  * Keras
+  * Pandas
+  * Graphing Tools: Matplotlib, Seaborn
+* Databases
+  * MySQL
 
 <hr>
 
