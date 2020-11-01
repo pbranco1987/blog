@@ -16,22 +16,37 @@ My Curriculum Vitae is provided below in Markdown.
 * City: Santo André, Brazil
 * Mobile: +55 11 95585-5725
 
-<br>
-
 <span style="color:blue">**Professional Experience**</span>
 
 * University Vector Calculus Professor at Uniasselvi
+  * From September 2017 to March 2019
+  * Double and triple integrals, gradient, divergence, curl, Stokes' Theorem
 * Lab Assistant at Instituto Mauá de Tecnologia
+  * From January 2012 to December 2012
+  * Kalman filters
+  * Testing of the LEON 3 softprocessor implemented on a Xylinx FPGA
+  * Tests with low-energy networks, including ZigBee
 * Internship as Telecommunications Engineer at Invensys
+  * From February 2011 to January 2012
+  * Implementation of a SCADA-based control system
+  * Relay of sensitive data via web queries and GPRS signals
 * Internship as PLC Engineer at Siemens
+  * From January 2011 to March 2011
+  * Sales of Programmable Logic Controller units and technical assistance
 
 
 <span style="color:blue">**Education**</span>
 
 * Ph.D. in Information Theory at the Universidade Federal de Santa Catarina (UFSC)
+  * From March 2016 to September 2020
   * Research internship in Imperial College London
+  * Design of lattices
 * Master's in Information Theory at the Universidade Federal de Santa Catarina (UFSC)
+  * From March 2013 to November 2015
+  * LDPC Codes applied to cooperative networks using the Compute & Forward communication scheme
+  * Use of multilevel coding for spectral efficiency
 * Bachelor's in Electrical Engineering majoring in Electronics at Instituto Mauá de Tecnologia (IMT)
+  * From February 2007 to January 2012
 
 <span style="color:blue">**Skills and Expertise**</span>
 
@@ -59,40 +74,6 @@ My Curriculum Vitae is provided below in Markdown.
 | Russian | A1 |
 
 A PDF copy of my curriculum is available <a href="http:\\prbranco.com\_pages\docs\Paulo_Branco__s_CV.pdf">here</a>.
-
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <title>PDF Viewer</title>
-  </head>
-  <body>
-    <div class="top-bar">
-      <button class="btn" id="prev-page">
-        <i class="fas fa-arrow-circle-left"></i> Prev Page
-      </button>
-      <button class="btn" id="next-page">
-        Next Page <i class="fas fa-arrow-circle-right"></i>
-      </button>
-      <span class="page-info">
-        Page <span id="page-num"></span> of <span id="page-count"></span>
-      </span>
-    </div>
-
-    <canvas id="pdf-render"></canvas>
-
-    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
-    <script src="js/main.js"></script>
-  </body>
-</html>
 
 Your Webhost,  
 Paulo Branco
