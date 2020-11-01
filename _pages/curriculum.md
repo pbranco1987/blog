@@ -7,6 +7,10 @@ permalink: /curriculum/
 
 My Curriculum Vitae is provided below in Markdown.
 
+<p>
+  <img src="profile_picture.jpg" alt="Paulo"/>
+</p>
+
 <style>
   h1 {
     font-weight: bold;
@@ -22,7 +26,6 @@ My Curriculum Vitae is provided below in Markdown.
   <h1>Personal Information</h1>
 </div>
 
-<img src="profile_picture.jpg" alt="Paulo"/>
 
 * Name: Paulo Ricardo Branco da Silva
 * Civil Status: Single
