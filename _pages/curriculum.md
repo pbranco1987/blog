@@ -14,7 +14,7 @@ My Curriculum Vitae is provided below in Markdown.
 <style>
   h1 {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     color: #FFFFFF;
   }
   #demobox {
