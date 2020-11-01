@@ -53,7 +53,9 @@ My Curriculum Vitae is provided below in Markdown.
 * Programming: C, Python, Java, R, MATLAB
 * Webpage Development
 
-<span style="color:blue">**Academic Articles Published** text</span>
+<span style="color:blue">**Academic Articles Published**</span>
+
+<span style="color:blue">**Events**</span>
 
 <span style="color:blue">**Languages**</span>
 
