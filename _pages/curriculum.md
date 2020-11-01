@@ -7,9 +7,7 @@ permalink: /curriculum/
 
 My Curriculum Vitae is provided below in Markdown.
 
-<p>
-  <img src="profile_picture.jpg" alt="Paulo"/>
-</p>
+![]({{ site.baseurl }}ppic.jpg "paulo")
 
 <style>
   h1 {
