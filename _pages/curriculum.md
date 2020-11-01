@@ -7,7 +7,20 @@ permalink: /curriculum/
 
 My Curriculum Vitae is provided below in Markdown.
 
-<span style="color:blue">**Personal Information**</span>
+<style>
+  h1 {
+    font-weight: bold;
+    font-size: 20px;
+    color: #FFFFFF;
+  }
+  #demobox {
+    background-color: #000000 ;
+  }
+</style>
+
+<div id="demobox">
+  <h1>Personal Information</h1>
+</div>
 
 <img src="profile_picture.jpg" alt="Paulo"/>
 
@@ -17,6 +30,8 @@ My Curriculum Vitae is provided below in Markdown.
 * Residential Address: Rua Alba Dias Cunha, 100, apto. 31
 * City: Santo André, Brazil
 * Mobile: +55 11 95585-5725
+
+<hr>
 
 <span style="color:blue">**Professional Experience**</span>
 
@@ -36,6 +51,7 @@ My Curriculum Vitae is provided below in Markdown.
   * From January 2011 to March 2011
   * Sales of Programmable Logic Controller units and technical assistance
 
+<hr>
 
 <span style="color:blue">**Education**</span>
 
@@ -50,14 +66,22 @@ My Curriculum Vitae is provided below in Markdown.
 * Bachelor's in Electrical Engineering majoring in Electronics at Instituto Mauá de Tecnologia (IMT)
   * From February 2007 to January 2012
 
+<hr>
+
 <span style="color:blue">**Skills and Expertise**</span>
 
 * Programming: C, Python, Java, R, MATLAB
 * Webpage Development
 
+<hr>
+
 <span style="color:blue">**Academic Articles Published**</span>
 
+<hr>
+
 <span style="color:blue">**Events**</span>
+
+<hr>
 
 <span style="color:blue">**Languages**</span>
 
@@ -76,6 +100,8 @@ My Curriculum Vitae is provided below in Markdown.
 | German | C2 (conferred by TestDaF)
 |-|-|
 | Russian | A1 |
+
+<hr>
 
 A PDF copy of my curriculum is available <a href="http:\\prbranco.com\_pages\docs\Paulo_Branco__s_CV.pdf">here</a>.
 
