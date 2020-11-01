@@ -9,7 +9,7 @@ My Curriculum Vitae is provided below in Markdown.
 
 <span style="color:blue">**Personal Information**</span>
 
-![](profile_picture.jpg)
+![](profile_picture.jpg =100x20)
 
 * Name: Paulo Ricardo Branco da Silva
 * Civil Status: Single
