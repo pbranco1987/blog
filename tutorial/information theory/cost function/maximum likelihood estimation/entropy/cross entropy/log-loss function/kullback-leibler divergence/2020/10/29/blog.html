@@ -195,24 +195,19 @@ window.onload = wrap_img;
 <a class="anchor" href="#Entropy-as-a-Measure-of-Uncertainty" aria-hidden="true"><span class="octicon octicon-link"></span></a>Entropy as a Measure of Uncertainty<a class="anchor-link" href="#Entropy-as-a-Measure-of-Uncertainty"> </a>
 </h2>
 <p>In order to understand cross entropy, we must first lay out the foundations of entropy. Entropy is a description of the uncertainty of a random variable. We want to measure how uncertain a probabilistic event is. Essentially, the more unlikely an event is, the more surprising it is and, consequently, the more information it holds. To say that it is raining now contains no information. It is a certain event that bears no surprise. However, to say that there is a $35$% probability of rain tomorrow does contain information. If we instead were faced with a probability of $50$% rain, would we be more or less certain of tomorrow's weather? Indeed we would be less certain, because the $35$% probability of rain implies a probability of $65$% without any rain, whilst $50$% either way essentially leaves with the most amount of doubt possible. This is an essential aspect of entropy: it is maximized for equally-likely events. Another elucidating example is a biased die and a fair die. Let us imagine that the biased die is heavily biased towards the six-dotted side such that for this die's events $\{1,2,3,4,5,6\}$, the corresponding set of probabilities is given by</p>
-<p>$\left\lbrace \frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12}, \frac{7}{12} \right\rbrace$.</p>
+$$ \left\lbrace \frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12}, \frac{7}{12} \right\rbrace $$<p>.</p>
 <p>The fair die, on the other hand, follows the traditional distribution</p>
-<p>$\left\lbrace \frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6} \right\rbrace$.</p>
+$$ \left\lbrace \frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6} \right\rbrace $$<p>.</p>
 <p>If you were to gamble, which die would you pick? Which one makes you less uncertain of your choice, or, better still, which one decreases the entropy you experience? Evidently, it is <strong>not</strong> the fair die, for, once again, uniform distributions maximize entropy.</p>
 <p>As we can see, there is a relationship between the probability of a random variable's events and its entropy. Let $X$ be a random variable, $\mathcal{X}$ its support group, and let $H(X)$ its entropy. According to [Cover-Thomas,2006], entropy is defined as</p>
-<p>$\begin{equation}
-    \label{eq:entropy}
-    H(X) = \sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( \frac{1}{p_X (x)} \right) = -\sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( p_X (x) \right)
-\end{equation}$</p>
-<p>where the $\log$ operational is defined with base $2$. This gives us the basic unit of information: the bit. Entropy can also be computed with different base values, including $e$, in which case the unit of measurement becomes the "nat". It is useful to distinguish now between the information theoretical bit and the bit in computer science. In computer science the bit is the basic unit of storage. It is the placeholder for data, even redundant, uniformative data. In Information Theory bit is the amount of actual information, stripped of all redundancy.</p>
-<p>Let $X$ be a random variable wit categories $\left\lbrace a,b,c,d \right\rbrace$. If the associated probabilities are $\{0.2,0.1,0.3,0.4\}$, $\eqref{eq:entropy}$ tells us that</p>
-<p>$
-\begin{align}
-    H(X) &amp;= -p(a) \log_2 \left( p(a) \right) - p(b)  \log_2 \left( p(b) \right) - p(c) \log_2 \left( p(c) \right) -p(d) \log_2 \left( p(d) \right) \\
-         &amp;= -0.2 \log_2(0.2) - 0.1 \log_2(0.1) - 0.3 \log_2(0.3) - 0.4 \log_2(0.4) \\
-\end{align}
-$</p>
-<p>where $p(u)$ for $u \in \{a,b,c,d\}$ is a shorthand for $p_x (X = u)$.</p>
+$$
+    H(X) = \sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( \frac{1}{p_X (x)} \right) = -\sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( p_X (x) \right) (1)
+$$<p>where the $\log$ operational is defined with base $2$. This gives us the basic unit of information: the bit. Entropy can also be computed with different base values, including $e$, in which case the unit of measurement becomes the "nat". It is useful to distinguish now between the information theoretical bit and the bit in computer science. In computer science the bit is the basic unit of storage. It is the placeholder for data, even redundant, uniformative data. In Information Theory bit is the amount of actual information, stripped of all redundancy.</p>
+<p>Let $X$ be a random variable wit categories $\left\lbrace a,b,c,d \right\rbrace$. If the associated probabilities are $\{0.2,0.1,0.3,0.4\}$, eq.(1) tells us that</p>
+$$
+    H(X) = -p(a) \log_2 \left( p(a) \right) - p(b)  \log_2 \left( p(b) \right) - p(c) \log_2 \left( p(c) \right) -p(d) \log_2 \left( p(d) \right) \\
+         = -0.2 \log_2(0.2) - 0.1 \log_2(0.1) - 0.3 \log_2(0.3) - 0.4 \log_2(0.4)
+$$<p>where $p(u)$ for $u \in \{a,b,c,d\}$ is a shorthand for $p_x (X = u)$.</p>
 
 </div>
 </div>
