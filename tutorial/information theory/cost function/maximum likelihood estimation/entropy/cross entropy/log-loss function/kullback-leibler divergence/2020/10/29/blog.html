@@ -206,7 +206,6 @@ $$<p>.</p>
 <p>As we can see, there is a relationship between the probability of a random variable's events and its entropy. Let $X$ be a random variable, $\mathcal{X}$ its support group, and $H(X)$ its entropy. According to [Cover-Thomas,2006], entropy is defined as</p>
 $$
 \begin{equation}
-    \label{eq:entropy}
     H(X) \triangleq \sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( \frac{1}{p_X (x)} \right) = -\sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( p_X (x) \right) \tag{1}
 \end{equation}
 $$<p>where the $\log$ function is defined under base $2$. This gives us the basic unit of information: the bit. Entropy can also be computed with different base values, including $e$, in which case the unit of measurement becomes the "nat". It is useful to distinguish now between the information theoretical bit and the bit in computer science. In computer science, the bit is the basic unit of storage. It is the placeholder for data, even redundant, uninformative data. In Information Theory, the bit is the basic unit of actual information, stripped of all redundancy.</p>
