@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Cross Entropy and Maximum Likelihood Estimation | Doctrina Machina</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Cross Entropy and Maximum Likelihood Estimation" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this article, I will discuss what Cross Entropy means from an information theoretical point of view and how it relates to key concepts in Machine Learning, including the log-loss cost function in linear regression classification and parameter estimation." />
+<meta property="og:description" content="In this article, I will discuss what Cross Entropy means from an information theoretical point of view and how it relates to key concepts in Machine Learning, including the log-loss cost function in linear regression classification and parameter estimation." />
+<link rel="canonical" href="https://www.prbranco.com/tutorial/information%20theory/cost%20function/maximum%20likelihood%20estimation/entropy/cross%20entropy/log-loss%20function/kullback-leibler%20divergence/2020/11/03/blog.html" />
+<meta property="og:url" content="https://www.prbranco.com/tutorial/information%20theory/cost%20function/maximum%20likelihood%20estimation/entropy/cross%20entropy/log-loss%20function/kullback-leibler%20divergence/2020/11/03/blog.html" />
+<meta property="og:site_name" content="Doctrina Machina" />
+<meta property="og:image" content="https://www.prbranco.com/images/graphs_cross_entropy.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-03T00:00:00-06:00" />
+<script type="application/ld+json">
+{"url":"https://www.prbranco.com/tutorial/information%20theory/cost%20function/maximum%20likelihood%20estimation/entropy/cross%20entropy/log-loss%20function/kullback-leibler%20divergence/2020/11/03/blog.html","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.prbranco.com/tutorial/information%20theory/cost%20function/maximum%20likelihood%20estimation/entropy/cross%20entropy/log-loss%20function/kullback-leibler%20divergence/2020/11/03/blog.html"},"image":"https://www.prbranco.com/images/graphs_cross_entropy.png","headline":"Cross Entropy and Maximum Likelihood Estimation","dateModified":"2020-11-03T00:00:00-06:00","datePublished":"2020-11-03T00:00:00-06:00","description":"In this article, I will discuss what Cross Entropy means from an information theoretical point of view and how it relates to key concepts in Machine Learning, including the log-loss cost function in linear regression classification and parameter estimation.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.prbranco.com/feed.xml" title="Doctrina Machina" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','G-7Q6GKDENCV','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Doctrina Machina</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/about_site/">About this Site</a><a class="page-link" href="/curriculum/">Curriculum Vitae</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Cross Entropy and Maximum Likelihood Estimation</h1><p class="page-description">In this article, I will discuss what Cross Entropy means from an information theoretical point of view and how it relates to key concepts in Machine Learning, including the log-loss cost function in linear regression classification and parameter estimation.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-03T00:00:00-06:00" itemprop="datePublished">
+        Nov 3, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      23 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#Tutorial">Tutorial</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Information Theory">Information Theory</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Cost Function">Cost Function</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Maximum Likelihood Estimation">Maximum Likelihood Estimation</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Entropy">Entropy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Cross Entropy">Cross Entropy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Log-loss Function">Log-loss Function</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Kullback-Leibler Divergence">Kullback-Leibler Divergence</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/pbranco1987/blog/tree/master/_notebooks/2020-11-03-blog.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/pbranco1987/blog/master?filepath=_notebooks%2F2020-11-03-blog.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/pbranco1987/blog/blob/master/_notebooks/2020-11-03-blog.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#Introduction">Introduction </a></li>
+<li class="toc-entry toc-h2"><a href="#Entropy-as-a-Measure-of-Uncertainty">Entropy as a Measure of Uncertainty </a></li>
+<li class="toc-entry toc-h2"><a href="#Kullback-Leibler-Divergence:-The-Distance-Between-Probability-Density-Functions">Kullback-Leibler Divergence: The Distance Between Probability Density Functions </a></li>
+<li class="toc-entry toc-h2"><a href="#Cross-Entropy-and-its-Relationship-to-the-KL-Divergence">Cross Entropy and its Relationship to the KL Divergence </a></li>
+<li class="toc-entry toc-h2"><a href="#Cross-Entropy-as-a-Cost-Function-in-Machine-Learning">Cross Entropy as a Cost Function in Machine Learning </a></li>
+<li class="toc-entry toc-h2"><a href="#Additional-Resources">Additional Resources </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-11-03-blog.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Introduction">
+<a class="anchor" href="#Introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction<a class="anchor-link" href="#Introduction"> </a>
+</h2>
+<p>Entropy in Thermodynamics is a measure of a system's disorder: the higher the disorder, the greater the entropy. Information can also be seen as a form of entropic measure. "Unordered" information is highly uncertain and presents us with more surprise than well-established, organized facts. It is hence more "informative".</p>
+<p>It is also of interest to note that most concepts in Thermodynamics have corresponding quantities in Information Theory. And this is not by chance, as the arrangement and the evolution of the state of matter relays information and, ultimately, tweaking with the properties of matter is how information is conveyed. Think about the way digital information is transmitted. The standard is to have it transmitted via fluctuations in electromagnetic waves. We modulate these waves with data.</p>
+<p>Information Theory also finds its way in Machine Learning. Machine Learning is the science of finding patterns, of trying to elicit information from what we observe. I did not use the word information by chance, as the role of models, independent variables, and parameter estimation (in the traditional sense of maximum-likelihood estimation) is to obtain from complex observations the essentials for prognostics, prediction, clustering, and a myriad of other processing tools.</p>
+<p>In what follows we will explore one very interesting quantity: the cross entropy. We will see that its main practical use is to compare a model to experimental data and to tell how much excess information is required for modeling data with a probability distribution different to the true ditribution of the data.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Entropy-as-a-Measure-of-Uncertainty">
+<a class="anchor" href="#Entropy-as-a-Measure-of-Uncertainty" aria-hidden="true"><span class="octicon octicon-link"></span></a>Entropy as a Measure of Uncertainty<a class="anchor-link" href="#Entropy-as-a-Measure-of-Uncertainty"> </a>
+</h2>
+<p>In order to understand cross entropy, we must first lay out the foundations of entropy. This quantity is a description of the uncertainty of a random variable. We want to measure how uncertain a probabilistic event is. Essentially, the more unlikely an event is, the more surprising it is and, consequently, the more information it holds. To say that we are observing that it is now raining contains no information. It is a certain event that bears no surprise. However, to say that there is a $35$% probability that it will rain tomorrow does contain information. If we were faced instead with a $50$% probability of rain, would we be more or less certain of tomorrow's weather? It seems reasonable to say that we would be less certain, because the $35$% probability of rain implies a probability of $65$% of no rain, whilst $50$% either way essentially leaves us with the most amount of doubt possible. This is an essential aspect of entropy: it is maximized for equally-likely events. Another illustrative example is a biased die and a fair die. Let us imagine that the biased die is heavily biased towards the six-dotted side such that for this die's events $\{1,2,3,4,5,6\}$, the corresponding set of probabilities is given by</p>
+$$
+\left\lbrace \frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12}, \frac{7}{12} \right\rbrace
+$$<p>.</p>
+<p>The fair die, on the other hand, follows the traditional distribution</p>
+$$
+\left\lbrace \frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6} \right\rbrace 
+$$<p>.</p>
+<p>If you were to gamble, which die would you pick? Which one makes you less uncertain of your choice, or, better still, which one decreases the entropy you experience? Evidently, it is <strong>not</strong> the fair die, for uniform distributions maximize entropy. No single side of the die seems more promising than the other.</p>
+<p>As we can see, there is a relationship between the probabilities of a random variable's events and its entropy. Let $X$ be a random variable, $\mathcal{X}$ its support group, and $H(X)$ its entropy. According to [Cover-Thomas,2006], entropy is defined as</p>
+$$
+    H(X) \triangleq \sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( \frac{1}{p_X (x)} \right) = -\sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( p_X (x) \right) \tag{1}
+$$<p>where the $\log$ function is defined under base $2$. This gives us the basic unit of information: the bit. Entropy can also be computed with different base values, including $e$, in which case the unit of measurement becomes the "nat". It is useful to distinguish now between the information theoretical bit and the bit in computer science. In computer science, the bit is the basic unit of storage. It is the placeholder for data, even redundant, uninformative data. In Information Theory, the bit is the basic unit of actual information, stripped of all redundancy.</p>
+<p>Equation $\eqref{eq:entropy}$ has one important property: $H(x) \geq 0$, because probability values are greater than or equal to zero. This makes sense, as the natural interpretation of information leads to thinking in terms of having information or not having any.</p>
+<p>Let us try the definition of entropy (1) with a numerical example. Let $X$ be a random variable with categories $\left\lbrace a,b,c,d \right\rbrace$. If the associated probabilities are $\{ 0.2,0.1,0.3,0.4 \}$, eq. (1) tells us that</p>
+$$
+\begin{aligned}
+    H(X) &amp;= -p(a) \log_2 \left( p(a) \right) - p(b)  \log_2 \left( p(b) \right) - p(c) \log_2 \left( p(c) \right) -p(d) \log_2 \left( p(d) \right) \\
+         &amp;= -0.2 \log_2(0.2) - 0.1 \log_2(0.1) - 0.3 \log_2(0.3) - 0.4 \log_2(0.4)
+\end{aligned}
+$$<p>where $p(u)$ for $u \in \{a,b,c,d\}$ is a shorthand for $p_X (X = u)$.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">string</span> <span class="k">as</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">H_X</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">H_X</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1.8464393446710154
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We observe that on average we can describe $X$ with approximately $1.85$ bits. Those are essential bits that cannot be discarded. If discarded, information would be lost. But let us say that we want to represent $X$ with $3$ bits for safety's sake. That is possible, and it would not result in any loss of information, but it does result in redundancy. In communication systems, such redundancy is very undesirable, since it results in a surplus of transmitted energy.</p>
+<p>Another interpretation for entropy that will perhaps make it more intuitive is how many binary questions we have to ask to determine with certainty some piece of information. Say we have a random variable $Y$ with equally-likely events $\{0,1,2,3,4,5,6,7\}$. Say we would like to determine one of those events, how many binary questions do we need? Intuitively, you may have already guessed that 3, hence 3 bits, but let us formalize the questions for $Y=1$, without incurring any loss of generality:</p>
+<ul>
+<li>Is $Y \geq 4$? No, therefore our set has been reduced to $\{0,1,2,3\}$.</li>
+<li>Is $Y \geq 2$? No, so our set is reduced yet again, this time to $\{0,1\}$.</li>
+<li>Is $Y \geq 1$? Yes, and we have found the targeted element.</li>
+</ul>
+<p>It is interesting to note that the binary question approach is related to a Machine Learning strategy known as the random tree. And this is in fact very intuitive, as making the right cut questions may lead to data conditioning. Conditional probalities produce lower entropy than marginal distributions. This is plain to see, as a conditioning random variable $X$ might give off some information about the conditioned variable $Y$. The conditional entropy $H(Y \mid X)$ follows the rule $H(Y \mid X) \leq H(Y)$, with equality iff $X$ and $Y$ are independent, i.e., they bear no information about each other. The concept of conditional entropy is also fundamental to the definition of mutual information, one of the most important quantities in Information Theory. However, for the sake of brevity, I will not go into detail about this aspect of the theory, but I would like to point the reader to [Cover-Thomas,2006] for more information.</p>
+<p>Based on the Boolean answers to the questions, we can even arrive at a possible binary code to event $Y=1$, namely $(001)_2$.</p>
+<p>Now, let us focus on an important special case: that of Bernoulli-distributed random variables. Let $X$ be a random variable defined with two possible states $\{0,1\}$. These states are respectively defined by the following probabilities:</p>
+$$
+\begin{aligned}
+    p(0) &amp;= 1 - \theta \\
+    p(1) &amp;= \theta 
+\end{aligned}
+$$<p>Now, let us vary $\theta \in [0,1]$ within its domain in order to observe the effects on the binary entropy $H(p)$.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">eps</span><span class="p">):</span> <span class="c1"># entropy function</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">+</span><span class="n">eps</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-15</span> <span class="c1"># added so that we do not have log(0), which is undefined</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">nel</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1"># creating the list of entropies for \theta = 0, 0.01, ..., 1</span>
+<span class="n">p_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">nel</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">p_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">p_list</span><span class="p">]</span>
+<span class="n">Hp</span> <span class="o">=</span> <span class="p">[</span><span class="n">entropy</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">p_set</span><span class="p">]</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'P(x=1)'</span><span class="p">:</span><span class="n">p_list</span><span class="p">,</span> <span class="s1">'Hp'</span><span class="p">:</span><span class="n">Hp</span><span class="p">}</span> <span class="c1"># converting to a dictionary for the Seaborn library</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dfentropy</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span> <span class="c1"># plotting the binary entropy curve</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">"whitegrid"</span><span class="p">)</span>
+<span class="n">fig_dims</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">fig_dims</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">xticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">"P(x=1)"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">"Hp"</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dfentropy</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Binary Entropy'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Text(0.5, 1.0, 'Binary Entropy')</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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%0A">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As we can see from the graph, the binary entropy $H(p)$ is zero at both $P(X=1) = 0 $ and $P(X=1) = 1$, because at those two points, the variable is not random; it is certain that it is $0$ and $1$, respectively. On the other hand, at $P(X=1) = 0.5 $, entropy is maximized, since both events are equally likely: $P(X=0) = 0.5$ and $P(X=1) = 0.5$. Consequently, we have the most uncertainty (one bit) at this point.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Kullback-Leibler-Divergence:-The-Distance-Between-Probability-Density-Functions">
+<a class="anchor" href="#Kullback-Leibler-Divergence:-The-Distance-Between-Probability-Density-Functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Kullback-Leibler Divergence: The Distance Between Probability Density Functions<a class="anchor-link" href="#Kullback-Leibler-Divergence:-The-Distance-Between-Probability-Density-Functions"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>One quantity very closely related to the entropy is the Kullback-Leibler (KL) Divergence, also known as the relative entropy. Let $X$ be a random variable and let $p_X$ and $q_X$ (for which we will use for convenience the shorthand $p$ and $q$, respectively) be two distributions that describe the probability density function of $X$. The distribution $p$ is the true distribution, the one that generates the observed, experimental data. Distribution $q$, on the other hand, is a modeled distribution. It is the attempt to estimate $p$. According to [Cover-Thomas,2006], the KL Divergence is defined as</p>
+$$
+     D(p||q) \triangleq \sum\limits_{x \in \mathcal{X}} p(x) \log \frac{p(x)}{q(x)} \tag{2}
+$$<p>where the $D(p||q)$ is usually computed with the $\log$ function under base $e$.</p>
+<p>The KL divergence measures how similar $q$ is to $p$. Concretely, it tells how much extra units of representation the distribution $q$ adds to the entropy of $X$. In order to observe this, let us go back to eq. (2):</p>
+$$
+\begin{aligned}
+ D(p||q) &amp;= \sum\limits_{x \in \mathcal{X}} p(x) \log p(x) - p(x) \log (q(x)) \\ 
+         &amp;= -\sum\limits_{x \in \mathcal{X}} p(x) \log q(x) - H(X) 
+\end{aligned}
+$$<p>The sum term on the right is the cross entropy. For the time being, let us simply see it as a form of entropy computed as the expected value with regard to another probability distribution. Let us illustrate this with a numerical example. Let $X$ be a random variable and let its states be $\{a,b,c,d\}$ with probability distribution</p>
+$$
+p = \left\lbrace \frac{1}{4}, \frac{1}{8}, \frac{1}{16}, \frac{9}{16} \right\rbrace
+$$<p>Its entropy is computed as</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">entropy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="o">/</span><span class="mi">16</span><span class="p">]),</span> <span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># entropy multiplied by log_e(2) to convert to nats</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1.1034329096381947</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us now calculate the expected value with regard to a different probability distribution</p>
+$$
+q = \left\lbrace \frac{1}{4}, \frac{1}{4}, \frac{1}{4}, \frac{1}{4} \right\rbrace
+$$<p>This results in</p>
+$$
+\begin{aligned}
+    -\sum\limits_{x \in \mathcal{X}} p(x) \log q(x) &amp;= -\frac{1}{4} \log \frac{1}{4} - \frac{1}{8} \log \frac{1}{4} - \frac{1}{16} \log \frac{1}{4} - \frac{9}{16} \log \frac{1}{4} \\
+    &amp;= -\log \frac{1}{4} \left( \frac{1}{4} + \frac{1}{8} + \frac{1}{16} + \frac{9}{16} \right) \\
+    &amp;= -\log \frac{1}{4}
+\end{aligned}
+$$
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">H_pq</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">H_pq</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1.3862943611198906
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>It is clear to see that the entropy represents the random variable more compactly. This is in fact another property of entropy. It represents the fewest possible number of information units necessary to describe on average a random variable.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If $q$ is equal to $p$, we have the expression $D(p||p)$, which computes to</p>
+$$
+\begin{aligned}
+ D(p||p) &amp;=  -\sum\limits_{x \in \mathcal{X}} p(x) \log p(x) - H(X) \\
+         &amp;= H(X) - H(X) = 0
+\end{aligned}
+$$<p>This gives us another insight into the KL Divergence. Given that $-\sum_{x \in \mathcal{X}} p(x) \log q(x) \geq H(X) $ and $H(X) \geq 0$, then $D(p||p) \geq 0$ and it is equal to 0 iff $-\sum_{x \in \mathcal{X}} p(x) \log p(x) = H(X)$.</p>
+<p>One last observation about the KL Divergence is that it is helpful to view it as the distance between two probability distributions. However, the KL Divergence is not a true distance measure, as it is not commutative, i.e, $ D(p||q) \neq  D(q||p)$. To show this, let us use $p$ and $q$ as previously defined.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">kullback_leibler</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">):</span> <span class="c1"># defining the KL Divergence function</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">+</span><span class="n">eps</span><span class="p">;</span> <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="o">+</span><span class="n">eps</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="o">/</span><span class="n">q</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="o">/</span><span class="mi">16</span><span class="p">])</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">H_pq</span> <span class="o">=</span> <span class="n">kullback_leibler</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="n">H_qp</span> <span class="o">=</span> <span class="n">kullback_leibler</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">H_pq</span><span class="p">,</span> <span class="n">H_qp</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[0.2828614514816974, 0.31712783136587464]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Cross-Entropy-and-its-Relationship-to-the-KL-Divergence">
+<a class="anchor" href="#Cross-Entropy-and-its-Relationship-to-the-KL-Divergence" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cross Entropy and its Relationship to the KL Divergence<a class="anchor-link" href="#Cross-Entropy-and-its-Relationship-to-the-KL-Divergence"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We are now going to give a name to the quantity $-\sum_{x \in \mathcal{X}} p(x) \log q(x)$. As we hinted in the last section, this is the cross entropy $H_{p,q}$. Formally,</p>
+$$
+H_{p,q} = -\sum_{x \in \mathcal{X}} p(x) \log q(x) \tag{3}
+$$
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This quantity is closely related to the KL Divergence, the difference being that it is the absolute number of representation units produced by the modeling distribution $q$ when describing random variable $X$, as opposed to the excess number of representation units defined by KL<sup id="fnref-1" class="footnote-ref"><a href="#fn-1">1</a></sup>.</p>
+<p>Rearranging the definition of the KL Divergence, we can understand the cross entropy as the sum of the entropy of a random variable $X$ with the divergence caused by modeling it by a probability distribution $q$ other than the true distribution $p$:</p>
+$$
+    H_{p,q} = H(X) + D(p||q)
+$$<p>For empirical data, $p$ will rarely be known, because the random variables we will be working with depend on a large scale of phenomena, most of which are not taken into account on purpose in order to simplify the problem and to make it tractable for mathematical analysis. For instance, the white Gaussian noise in communication systems is not white nor Gaussian. It is an approximation that highlights only the dominant random phenomenon in the system, which is the movement of electrons within electronic wiring <sup id="fnref-2" class="footnote-ref"><a href="#fn-2">2</a></sup>. But it fails to take into account many other physical phenomena that are not quite Gaussian.</p>
+<p>It is thus important to realise that most often we will be working with $q$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Cross-Entropy-as-a-Cost-Function-in-Machine-Learning">
+<a class="anchor" href="#Cross-Entropy-as-a-Cost-Function-in-Machine-Learning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cross Entropy as a Cost Function in Machine Learning<a class="anchor-link" href="#Cross-Entropy-as-a-Cost-Function-in-Machine-Learning"> </a>
+</h2>
+<p>Cross entropy is a distance measure between distributions. It is not suprising then that it finds its way as a cost function in classification problems. It is, for instance, used as the cost function in logistic regression and in neural networks.</p>
+<p>Let us analyse binary logistic regression. As we known from [Goodfellow et al., 2016], in a training set for a sample $i$ and an $m$-dimensional vector of input variables $\mathbf{x}^{(i)} \in \mathbb{R}^m$, the output $y^{(i)} \in \{ 0,1 \}$ is predicted by an estimator $\hat{y}^{(i)}$ given by</p>
+$$
+    \hat{y}^{(i)} = \sigma \left( \mathbf{w}^{\text{T}} \mathbf{x}^{(i)} + b \right)
+$$<p>where $\mathbf{w}$ is the weight vector applied to $\mathbf{x}$ and $b \in \mathbb{R}$ is the bias. The sigmoid function $\sigma: \mathbb{R} \rightarrow (0,1)$, given by</p>
+$$
+    \sigma(z) = \frac{1}{1 + e^{-z}},
+$$<p>simply returns as an output the probabilistic interpretation to the linear function it takes in. By chossing a threshold $th$ (usually but not necessarily chosen to be $0.5$), we can define the classification criterion $\gamma \left( \hat{y}^{(i)} \right)$ as</p>
+$$
+\begin{aligned}
+    \gamma \left( \hat{y}^{(i)} \right) = 
+        \begin{cases}
+            0,              &amp; \text{if } \hat{y} &lt; th \\
+            1,              &amp; \text{otherwise}
+        \end{cases}
+\end{aligned}
+$$<p>We know the ground truth in a supervised problem. We remind the reader that certainty in entropic measure is directly related to zero and one probabilities. Therefore, for the classical two-state logistic regression problem, we have two possible probability distributions for the states $(0,1)$:</p>
+<ul>
+<li>$p(0) = 1$ and $p(1) = 0$ for the $0$-label and</li>
+<li>$p(0) = 0$ and $p(1) = 1$ for the $1$-label</li>
+</ul>
+<p>Using the probability distribution notation, we will define the respective $y^{(i)}$ labels as</p>
+<ul>
+<li>$y^{(i)} = (1,0)$ and</li>
+<li>$y^{(i)} = (0,1)$</li>
+</ul>
+<p>and we define the prediction $\hat{y}^{(i)}$ probabilistically as</p>
+$$
+    \hat{y}^{(i)} = \left( 1-\hat{y}^{(i)}, \hat{y}^{(i)} \right)
+$$<p>We can now use cross entropy to compute how far away the prediction $\hat{y}^{(i)}$ is from the ground truth $y^{(i)}$, obtaining the loss function for sample $i$:</p>
+$$
+    J^{(i)} (\mathbf{w}, b) \triangleq H_{y^{(i)},\hat{y}^{(i)}}
+$$<p>For the $m$ samples, we can define the average cost function:</p>
+$$
+    J (\mathbf{w}, b) \triangleq \frac{1}{m} \sum\limits_{i=1}^{m} H_{y^{(i)},\hat{y}^{(i)}}
+$$<p>Let us see the cross entropy used for two samples in a classification problem defining whether a picture depicts day (0 state) or night (1 state). For both samples, the ground truth is $\mathbf{y} = (0,1)$, i.e., the picture is taken at night. Running our classification linear regression algorithm, we arrive for sample $1$ at $\mathbf{\hat{y}}^{(1)} = (0.3,0.7)$. For sample $2$, the output is $\mathbf{\hat{y}}^{(2)} = (0.85,0.15)$. Let us compare the loss functions $J^{(1)}$ and $J^{(2)}$.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">cross_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">):</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="o">+</span><span class="n">eps</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># ground truth</span>
+<span class="n">q1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.7</span><span class="p">])</span> <span class="c1"># prediction sample 1</span>
+<span class="n">q2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.85</span><span class="p">,</span><span class="mf">0.15</span><span class="p">])</span> <span class="c1"># prediction sample 2</span>
+<span class="n">J_1</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q1</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="n">J_2</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q2</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"J1 = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">J_1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" and J2 = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">J_2</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>J1 = 0.356674943938731 and J2 = 1.8971199848858746
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We observe that the first loss function yields a smaller penalty. That is expected, as the distribution of sample $1$ is much more similar to $(0,1)$ than that of sample $2$. It seems reasonable then to define the parameter estimation problem as one in which we minimize the cost function $J$</p>
+$$
+    \left( \mathbf{w}^\ast, b^\ast \right) = {\text{arg} \, \min}_\limits{\mathbf{w}, b} \, J( \mathbf{w}, b)
+$$<p>Let us trace back and analyse the standard loss function for logistic regression, known in the Literature as the log-loss (LL) function [Goodfellow et al., 2016]:</p>
+$$
+    J_{\text{LL}}^{(i)} = -\left( y^{(i)} \log \hat{y}^{(i)} + \left( 1-y^{(i)} \right) \log 1-\hat{y}^{(i)} \right)
+$$<p>If we go back to the definition of cross function (3) and interpret $y^{(i)}$ as $(1-y,y)$, where $y \in {0,1}$, we can write $H_{y^{(i)},\hat{y}^{(i)}}$ out as</p>
+$$
+    H_{y^{(i)},\hat{y}^{(i)}} = -\left( y^{(i)} \log \hat{y}^{(i)} + \left( 1-y^{(i)} \right) \log 1-\hat{y}^{(i)} \right)
+$$<p>The expressions are identical. Does this imply that the log-loss function is an instance of cross entropy? No, the log-loss is obtained via another route. It is obtained via the Maximum-Likelihood (ML) estimation rule, which is all the more interesting, as this shows that Information Theory is directly linked to ML parameter estimation. And since we know that there is no better estimator than the ML (a result deriver by Cramér-Rao [Cover-Thomas,2006]), we see that information theoretical cost functions are capable of finding the system's optimum predictors.</p>
+<p>And how is the log-loss function derived via ML? Let $Y \in \{0,1\}$ be a Bernoulli random variable with probabilities $P(Y = 1) = \hat{y}$ and $P(Y = 0) = 1-\hat{y}$, then</p>
+$$
+\begin{aligned}
+    \max p(y \mid \hat{y}; \mathbf{w}, b) &amp;= \max \hat{y}^y \left( 1-\hat{y} \right)^{1-y} \\
+    \max \log \left( p(y \mid \hat{y}; \mathbf{w}, b)  \right) &amp;= \max \log \left( \hat{y}^y \left( 1-\hat{y} \right)^{1-y} \right) \\
+    \max \log \left( p(y \mid \hat{y}; \mathbf{w}, b)  \right) &amp;= \log \hat{y}^y + \log \left( 1-\hat{y} \right)^{1-y} \\
+    \max \log \left( p(y \mid \hat{y}; \mathbf{w}, b)  \right) &amp;= y \log \hat{y} + (1-y) \log \left( 1-\hat{y} \right)
+\end{aligned}
+$$<p>But maximization problems over a function $f(x)$ can always be framed as minimization problems over $-f(x)$. Therefore:</p>
+$$
+    \min \log \left( -p(y \mid \hat{y}; \mathbf{w}, b)  \right) = - \left( y \log \hat{y} + (1-y) \log \left( 1-\hat{y} \right) \right)
+$$<p>And we arrive once again at the same expression.</p>
+<p>The results detailed thus far for the binary case also apply to classification problems with $k&gt;2$ categories. The only slight alteration is that the ground truth will be a $k$-dimensional vector of zeros, except for the true category, which will be set to $1$.</p>
+<p>Let us see some examples of logistic classification for $k=10$ states.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># creation of a random distribution p for 10 categories</span>
+<span class="n">p</span> <span class="o">/=</span> <span class="n">p</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">cats</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)])</span> <span class="c1"># categories = [a,b,c,d,e,f,g,h,i,j]</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'Category'</span><span class="p">:</span><span class="n">cats</span><span class="p">,</span> <span class="s1">'Probability'</span><span class="p">:</span><span class="n">p</span><span class="p">}</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span> <span class="c1"># dictionary for seaborn</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">"dark"</span><span class="p">)</span> <span class="c1"># plotting p</span>
+<span class="n">fig_dims</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">fig_dims</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s2">"Category"</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">"Probability"</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">"deep"</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dist</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Probability Distribution"</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmQAAAGFCAYAAABT4e8GAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4yLjIsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+WH4yJAAAgAElEQVR4nO3deXhU5aHH8V+2CVwmIWC4KGUxiYC2UhIWuSgBgiJclgeRYBLDjt5SlYqgssqSxhCDWERZii0CYYvQeAuytQFqBK9LsGEVsGzKDhrAyTaZzNw/eJgaliya8SXJ9/M8Pk/mnPOe+c0Ew4/3vDnj5XK5XAIAAIAx3qYDAAAA1HQUMgAAAMMoZAAAAIZRyAAAAAyjkAEAABhGIQMAADCMQgZUMRMmTFDLli1L/HffffepTZs2GjhwoN5///1Kfb5u3bpp8ODBP/v5Bg8erG7dut3y8bX34YfsdrvOnTv3kzN++umnN7zHv/zlL/XAAw8oPj5ef/3rX28Yk56erpYtW+rTTz+t8PN988035TquZcuWmjBhwi0fV4brs1z/vgPwDF/TAQD8OBMnTlS9evUkSS6XSzabTevWrdOECROUk5OjESNGGE7404waNUr5+fm33B8TE6OOHTu6H586dUojRozQb37zGz3++OOVkqF79+7q3r27JMnhcOjbb79VRkaGXn75ZX3xxReaMWOG+9j27dsrJSVFYWFhFXqOqVOn6tixY0pNTS3z2JSUFDVt2rRiL6IC/vKXv2jGjBnas2ePe1tZ3wcAlYNCBlRRjzzyiBo3blxiW3R0tHr16qV58+Zp0KBBslgshtL9dA899FCp+yMiIhQREeF+fPLkSR0/frxSM7Rs2VL9+vUrse2pp57S+PHjtXr1anXo0EG9evWSJDVp0kRNmjSp8HPs2LFDv/jFL8p17PVZKtvnn3+uwsLCEtvK+j4AqBxcsgSqkVq1aqlbt26y2Wz66quvTMeplry9vTVt2jTVrVtX77zzjuk4AKoJChlQzXh5eUmSiouLJV1dszVlyhRNmjRJrVq1UufOnfXdd99JkrKysjRs2DD3bNOQIUP0+eef3/S8a9as0cMPP6xWrVpp4MCB+uijj0rsd7lcWrVqlaKjoxUREaFWrVqpZ8+eWrRokW72CW1lna+stUs/XEOWnp6uIUOGSLp6Kbdly5Y6evSoWrZsqZSUlBvGzpo1S/fff78uX758y/OXxmq1KioqSgcOHNDFixfdGa5fQ7ZlyxYNGDBAERERatu2rYYPH65du3a597ds2VKnTp3SZ599ppYtWyo9PV0nT55Uy5YttWTJEsXFxen+++/XsGHD3MffbM3YwoULFRkZqdatW2vIkCElLjmWNu6H2wcPHuxef3j99uu/D4cOHdIzzzyjdu3a6de//rWeeOIJZWRklDhm8ODBGjlypDIzM/X444+rVatW6tq1q9566y05nc5yvc9ATUIhA6oRp9Opzz77TBaLpcRapg0bNujgwYOaPHmynnjiCdWvX19bt27V4MGDdebMGf32t7/Vb3/7W505c0bDhg3T1q1bS5x33759SkxMVK9evTR27FhduXJFv/nNb/Txxx+7j5kzZ46mT5+ue+65RxMnTtTYsWPl7++v2bNn63//938rfL6KaN++vUaNGiXp6tqylJQUhYaG6le/+pU2b958w/GbNm1SZGSk6tat+6OeT5KaN28u6Wo5uZnPPvtML7zwgho0aKDx48frueee09dff63hw4e7F86npKSoXr16Cg0NVUpKitq3b+8e/+abb6phw4aaNGmS+vbte8scW7Zs0bvvvqvY2Fg9++yzOnr0qIYMGVLhGdJRo0apXbt27lwxMTE3PW7Pnj2KiYnRnj17NHz4cI0dO1ZFRUV69tlntWLFihLHHj58WGPGjFGHDh00ZcoUNWnSRG+//bZWrVpVoWxATcAaMqCKunLlinumq7i4WKdOndKSJUt08OBBDRs2THXq1HEfW1BQoDlz5rgXhDscDiUkJKhhw4b6y1/+IqvVKkmKjY1Vnz59NGPGDHXu3Fl+fn6SpLy8PC1atEhdunSRJPXv3189evTQ66+/rvT0dBUVFWn58uXq3bu3kpOT3c87cOBAdezYUVu2bFH//v3d28s6X0U1adJEDz74oBYuXKjw8HD3Wqu+ffsqOTlZe/bs0a9//WtJ0j//+U+dOnVKL774YoWf54eulblLly7ddP/GjRtVq1YtLViwwD1r+eCDD+p3v/ud9u/fryZNmqhfv3568803FRwc7M588uRJSVKDBg00a9Ys9/fgVgoLC7V69Wr3bGGPHj3Uu3dvzZ07V2+99Va5X89DDz2k9evXKysrq9S1aomJifLy8tLatWt15513SpLi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%0A">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">q</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># creating a model distribution q very similar to p</span>
+<span class="n">q</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.95</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
+<span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'Category'</span><span class="p">:</span><span class="n">cats</span><span class="p">,</span> <span class="s1">'Probability'</span><span class="p">:</span><span class="n">q</span><span class="p">}</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">fig_dims</span><span class="p">)</span> <span class="c1"># plotting q</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s2">"Category"</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">"Probability"</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">"deep"</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dist</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Probability Distribution"</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmQAAAGFCAYAAABT4e8GAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4yLjIsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+WH4yJAAAgAElEQVR4nO3deXhU9b3H8U+2CVwmIWC4KGUxiYC2UhIWuSgBgiJclgeRYBLDjt5SlYqgssqSxhCDWERZii0CYYvQeAuytQFqBK9LsGEVsGzKDhrAyTaZzNw/eJgaliya8UeS9+t5fB7mnDkn3yQIb37nZMbL5XK5BAAAAGO8TQ8AAABQ0xFkAAAAhhFkAAAAhhFkAAAAhhFkAAAAhhFkAAAAhhFkQBUzYcIEtWzZssR/9913n9q0aaOBAwfq/fffr9SP161bNw0ePPhnP9/gwYPVrVu3Wz6+9nX4IbvdrnPnzv3kGT/99NMbvsa//OUv9cADDyg+Pl5//etfbzgmPT1dLVu21Kefflrhj/fNN9+U63ktW7bUhAkTbvm4Mlw/y/VfdwCe4Wt6AAA/zsSJE1WvXj1Jksvlks1m07p16zRhwgTl5ORoxIgRhif8aUaNGqX8/Pxb7o+JiVHHjh3dj0+dOqURI0boN7/5jR5//PFKmaF79+7q3r27JMnhcOjbb79VRkaGXn75ZX3xxReaMWOG+7nt27dXSkqKwsLCKvQxpk6dqmPHjik1NbXM56akpKhp06YV+yQq4C9/+YtmzJihPXv2uLeV9X0AUDkIMqCKeuSRR9S4ceMS26Kjo9WrVy/NmzdPgwYNksViMTTdT/fQQw+Vuj8iIkIRERHuxydPntTx48crdYaWLVuqX79+JbY99dRTGj9+vFavXq0OHTqoV69ekqQmTZqoSZMmFf4YO3bs0C9+8YtyPff6WSrb559/rsLCwhLbyvo+AKgcXLIEqpFatWqpW7dustls+uqrr0yPUy15e3tr2rRpqlu3rt555x3T4wCoJggyoJrx8vKSJBUXF0u6es/WlClTNGnSJLVq1UqdO3fWd999J0nKysrSsGHD3KtNQ4YM0eeff37T865Zs0YPP/ywWrVqpYEDB+qjjz4qsd/lcmnVqlWKjo5WRESEWrVqpZ49e2rRokW62Tu0lXW+su5d+uE9ZOnp6RoyZIikq5dyW7ZsqaNHj6ply5ZKSUm54dhZs2bp/vvv1+XLl295/tJYrVZFRUXpwIEDunjxonuG6+8h27JliwYMGKCIiAi1bdtWw4cP165du9z7W7ZsqVOnTumzzz5Ty5YtlZ6erpMnT6ply5ZasmSJ4uLidP/992vYsGHu59/snrGFCxcqMjJSrVu31pAhQ0pcciztuB9uHzx4sPv+w+u3X/99OHTokJ555hm1a9dOv/71r/XEE08oIyOjxHMGDx6skSNHKjMzU48//rhatWqlrl276q233pLT6SzX1xmoSQgyoBpxOp367LPPZLFYStzLtGHDBh08eFCTJ0/WE088ofr162vr1q0aPHiwzpw5o9/+9rf67W9/qzNnzmjYsGHaunVrifPu27dPiYmJ6tWrl8aOHasrV67oN7/5jT7++GP3c+bMmaPp06frnnvu0cSJEzV27Fj5+/tr9uzZ+t///d8Kn68i2rdvr1GjRkm6em9ZSkqKQkND9atf/UqbN2++4fmbNm1SZGSk6tat+6M+niQ1b95c0tU4uZnPPvtML7zwgho0aKDx48frueee09dff63hw4e7b5xPSUlRvXr1FBoaqpSUFLVv3959/JtvvqmGDRtq0qRJ6tu37y3n2LJli959913Fxsbq2Wef1dGjRzVkyJAKr5COGjVK7dq1c88VExNz0+ft2bNHMTEx2rNnj4YPH66xY8eqqKhIzz77rFasWFHiuYcPH9aYMWPUoUMHTZkyRU2aNNHbb7+tVatWVWg2oCbgHjKgirpy5Yp7pau4uFinTp3SkiVLdPDgQQ0bNkx16tRxP7egoEBz5sxx3xDucDiUkJCghg0b6i9/+YusVqskKTY2Vn369NGMGTPUuXNn+fn5SZLy8vK0aNEidenSRZLUv39/9ejRQ6+//rrS09NVVFSk5cuXq3fv3kpOTnZ/3IEDB6pjx47asmWL+vfv795e1vkqqkmTJnrwwQe1cOFChYeHu++16tu3r5KTk7Vnzx79+te/liT985//1KlTp/Tiiy9W+OP80LWYu3Tp0k33b9y4UbVq1dKCBQvcq5YPPvigfve732n//v1q0qSJ+vXrpzfffFPBwcHumU+ePClJatCggWbNmuX+HtxKYWGhVq9e7V4t7NGjh3r37q25c+fqrbfeKvfn89BDD2n9+vXKysoq9V61xMREeXl5ae3atbrzzjslSXFxcYqLi1NKSor++7//W/Xr15cknT9/XgsWLHCvsD322GOKjIzU+vXrFR8fX+7ZgJqAFTKgiurfv786duyojh07qlOnToqJiXGveo0bN67Ec5s2bVrip/MOHDigs2fPKj4+3h1jkhQYGKhBgwbp3Llz2rdvn3t78+bN3fEkSUFBQerbt6/279+vCxcuyM/PTx9//LESEhJKfNycnBxZrVbl5eWV2F7W+SpLr1695O3trU2bNrm3bdiwQf/xH/+hqKion3TuoqIiSf++RHy9O++8U7m5uUpMTNSRI0ckXb0UuGXLFvXs2bPM8//Xf/1XmTEmSZGRkSVe/qNZs2aKjIzUjh073JetK8vFixe1e/du9evXzx1jkuTv76+RI0eqoKCgxCpn7dq11bVr1xLPCwkJcV/mBfBvrJABVdSsWbMUHBws6eqN5oGBgQoLC5O/v/8Nz73jjjtKPL62ChMSEnLDc0NDQyVJp0+fdv8U47VtP3Qt8E6dOqUGDRrIz89P//jHP7R161YdO3ZMJ06ccN+jdf09ZOU5X2Vo2LCh2rdvry1btmj8+PFyOp3avHmzHn74YdWuXfsnnfvayti1lx653qBBg7Rjxw4tX75cy5cvV+PGjRUVFaXo6Gjde++9ZZ7/2ipTWW71tdy2bZu+++67SvtaSle/N9LNf99cu0R++vRp97agoCB5e5f8d7/FYuEeMuAmCDKgimrTps0NL3txKz4+PiUe3+wm++v3lbU6c+0vVW9vb7lcLr300kv64IMP1LZtW0VERCgmJkbt27fX0KFDyzXjD89Xmfr27aspU6Zo9+7dKigo0IULF9SnT5+ffN4vv/xSXl5eN7w47TVWq1XLly9Xdna2MjIylJmZqdTUVK1YsUIpKSml3hcm3fg9q4hrX8vSzvFjVs9K+31z7WP+8PdNZX8vgeqMIANqoGuve3X06NEb9h07dkySSlySurYy8kMnTpyQdPX+raysLH3wwQd65pln9Pzzz7uf43A4dOnSpRten6us81WmHj16KCEhQdu2bVN+fr6CgoJ+8mtr2Ww27dixQxEREbdcyTp27Ji+//57hYeHKzw8XC+++KL+9a9/KT4+Xu+++26ZQVZet/paBgQEuFfvvL29ZbfbSzznx1w2rOjvGwDlxz9fgBroV7/6lRo0aKBVq1bJZrO5t9tsNq1cuVINGjTQ/fff796+f/9+HThwwP344sWLWrdundq1a6d69eq5L9/dc889JT7Oe++9p/z8fDkcjhLbyzrfj3FtNej6y2GBgYHq0qWLPvzwQ3344Yfq0aNHue7NuhWXy6WkpCTl5eXpqaeeuuXzEhMT9cwzzyg3N9e9LTQ0VIGBgSVWjry9vX/SJbyPPvqoxNtFHT58WDt27FC3bt3c97cFBwfr4MGDJVa4Nm7ceMO5rs11q3mu/b5Yt26dzp49695ut9v17rvvymKx8EKywI/EChlQA/n5+emVV17RmDFjNGDAAEVHR0uS1q5dq/Pnz2vu3LkloqFu3boaOXKkhg8fLh8fH61YsUIOh0MTJ06UdPVV861Wq2bOnKnTp08rMDBQn376qTZu3Ch/f/8SUVKe8/0Y10Ju3bp1crlc6t+/v3x9r/4R16dPH/fKXWJiYrnPeejQIff7VhYXF+vixYvKyMjQ7t27NWTIED388MO3PHb48OF6+umnFR8fr8cee0z+/v7KyMjQ119/rddee839vPr16+vgwYNauXKlHnjgAdWqVatCn7fFYtGTTz6pwYMHKz8/X0uWLFFgYKDGjBnjfk6fPn20ePFiPffcc+ratav279+vTZs23bC6d+3x3Llz1aFDhxJvTXXNlClTNHToUEVHRysuLk516tTRunXrtH//fk2ZMkWBgYEVmh/AVQQZUEP16NFDixcv1vz58zVv3jz5+vqqdevWevXVV92vR3VNZGSkWrVqpT//+c+6dOmSWrdurTlz5rhX0YKDg7Vo0SK9/vrrmj9/viwWi0JCQvTGG29oz549WrZsmS5evOj+IYSyzvdjhIWFafDgwUpPT9fevXvVoUMH9w8KREVFyWq1ymq13vC5lebvf/+7/v73v0u6GrH/+Z//qZCQEP3hD39wv2XSrXTq1EkLFizQH//4R82fP1+FhYVq3ry53njjDfXu3dv9vNGjR2vatGlKSkrSs88+W+FLmTExMfLy8tLChQtVWFioDh06aMKECWrUqJH7Oc8//7wcDoc2bNigHTt2qHXr1lq6dOkNL/0RFxenTz75RH/605+0d+/emwZZRESEVq1apblz52rx4sVyOp269957NW/ePD3yyCMVmh3Av3m5SrtLEwCqAbvdrgcffFAxMTF66aWXTI8DADfgHjIA1d6GDRv0/fff6/HHHzc9CgDcFJcsAVRb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mJgoSQoKClJSUpKsVqtmzJihffv2KTg4WKdOndKCBQskSZMnT5bD4ZCXl5emTJmie++9V1FRUQoNDVVISIg+/PBDrVmzRkFBQVq5cqXy8vL01FNPmfrSAKgiCDIAVd758+fVpEmTEtvq1KmjkydPKjw8XAMHDlRhYaE6d+6sMWPG6H/+53909OhRPfzww3riiSeUlJSke+65R2vWrNGf/vQntWrVSpcuXdLatWv13Xff6dFHH5UkpaSkaPDgwXrkkUf05ZdfatKkSUpPT9eZM2eUnp6uevXqKTAwUBs2bFB8fLzWrVunt99+28SXBEAVQ5ABqPIaNWqkAwcOlNj2zTff6OzZs9q7d68++eQTWa1W2e32G449cuSIZsyYIUkqKipSSEiIjh49qvDwcElS/fr1FRoa6n5u+/btJUn33Xefzp49K0mqV6+e+z1go6Oj9cILL6h9+/YKDg5WcHCwZz5pANUK95ABqPKioqL00Ucf6euvv5Z0NaySk5P15ZdfKiAgQLNnz9aIESNUUFAgl8slb29vOZ1OSVJISIhee+01paam6qWXXlKXLl3UvHlz95u2X758WcePH5d09c3qs7KyJElffvmlO7Z++P6ajRo1UkBAgBYuXKjo6Oif60sAoIrjlfoBVAv79u1TSkqKXC6XcnNzFRUVpZ49e2rs2LGqU6eOateurTNnzmjp0qX69ttv9cILL+h3v/udmjVrptdee03FxcWSpFdffVV33323EhIS3NG1Z88erVmzRkVFRXrllVdkt9vlcDg0ZcoUtWrVSg899JB27tzpnuVvf/ubEhMTtX37dvn4+Jj6kgCoQggyALjOkSNHdPDgQfXu3Vs5OTnq06ePtm/fLovFUq7jN27cqK+++uq2edNiALc/ggwArpOXl6dx48bp22+/VXFxsQYNGqT+/fuX69g33nhDWVlZmj9/voKCgjw8KYDqgiADAAAwjJv6AQAADCPIAAAADCPIAAAADCPIAAAADCPIAAAADCPIAAAADPt/S7NJAEO941kAAAAASUVORK5CYII=%0A">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us compute now the entropy of each distribution, their cross entropy and the KL Divergence.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">H_p</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">H_q</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">H_pq</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="n">KL</span> <span class="o">=</span> <span class="n">kullback_leibler</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">H_p</span><span class="p">,</span><span class="n">H_q</span><span class="p">,</span><span class="n">H_pq</span><span class="p">,</span><span class="n">KL</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"[Entropy of p, Entropy of q, Cross Entropy, KL Divergence] = "</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[Entropy of p, Entropy of q, Cross Entropy, KL Divergence] = [2.03000382 2.02313082 2.0381443  0.00814047]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Since the model distribution $q$ is so close to the true distribution $p$, we see that their entropies are almost identical, that the cross entropy is virtually identical to them both, with just a small increment in infomation content, and that the KL divergence is close to zero.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># now choosing a complete random q (uncorrelated to p)</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="o">/</span><span class="n">q</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'Category'</span><span class="p">:</span><span class="n">cats</span><span class="p">,</span> <span class="s1">'Probability'</span><span class="p">:</span><span class="n">q</span><span class="p">}</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">fig_dims</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s2">"Category"</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">"Probability"</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">"deep"</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dist</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Probability Distribution"</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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fdq/f797+eLFi1q7dq3atWunevXquS/f3XfffaVe5/3331dBQYEcDkep9bc7349xbTTo+sthgYGB6ty5sz766CN99NFH6t69e7nmZt2Ky+VScnKy8vPz9fTTT99yv6SkJD377LPKy8tzrwsNDVVgYGCpkSNvb++fdAnv448/LvW4qMOHD2v79u3q2rWre35bgwYNdPDgwVIjXBs2bLjhXNdy3SrPtT8Xa9eu1dmzZ93r7Xa73nvvPVksFm4kC/xIjJABNZCfn59effVVjRkzRv3791d0dLQkac2aNTp//rzmzJlTqjTUrVtXI0eO1PDhw+Xj46Ply5fL4XBo4sSJkq7eNd9qtWrGjBk6ffq0AgMD9dlnn2nDhg3y9/cvVUrKc74f41qRW7t2rVwul/r16ydf36s/4nr37u0euUtKSir3OQ8dOuR+bmVJSYkuXryozMxM7dq1S0OGDNGjjz56y2OHDx+uZ555RvHx8XriiSfk7++vzMxMff3113r99dfd+9WvX18HDx7UihUr9OCDD6pWrVoVet8Wi0VPPfWUBg8erIKCAi1evFiBgYEaM2aMe5/evXtr0aJFev7559WlSxft27dPGzduvGF079rynDlz1KFDh1KPprpmypQpGjp0qKKjoxUXF6c6depo7dq12rdvn6ZMmaLAwMAK5QdwFYUMqKG6d++uRYsWad68eZo7d658fX3VunVrvfbaa+77UV0TGRmpVq1a6S9/+YsuXbqk1q1ba/bs2e5RtAYNGmjhwoV64403NG/ePFksFoWEhOjNN9/U7t27tXTpUl28eNH9Swi3O9+PERYWpsGDBysjI0N79uxRhw4d3L8oEBUVJavVKqvVesN7K8s//vEP/eMf/5B0tcT++7//u0JCQvTHP/7R/cikW3nkkUc0f/58/elPf9K8efNUVFSk5s2b680331SvXr3c+40ePVrTpk1TcnKynnvuuQpfyoyJiZGXl5cWLFigoqIidejQQRMmTFDjxo3d+7zwwgtyOBxav369tm/frtatW2vJkiU33PojLi5On376qf785z9rz549Ny1kERERWrlypebMmaNFixbJ6XTq/vvv19y5c/XYY49VKDuA/+flKmuWJgBUA3a7XQ899JBiYmL08ssvm44DADdgDhmAam/9+vX6/vvv9eSTT5qOAgA3xSVLANXWokWL9OWXXyor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Dhw44OksAAAANVK5Clnnzp21YMECxcbGasWKFbLZbJ7OBQAAUGOUq5B16tRJb731lubNm6edO3fqkUce0YQJE3Tq1ClP5wMAAKj2fMuz05EjR5SRkaFt27apQ4cOWrFihRwOh0aPHq2MjAxPZwQAAKjWylXIJk+erJiYGI0ePVq1atVyr+/fv7/HggEAANQU5b5k2a9fP3cZmzVrliQpPj7ec8kAAABqiDJHyFavXq01a9boyJEjysrKkiSVlJTI4XBo3LhxP0tAAACA6q7MQta3b1917NhRf/rTnzRq1ChJkre3t+66666fJRwAAEBNUGYhO3TokFq1aqXHH39cx44dc68/cuSIHnnkEY+HAwAAqAnKLGT/+7//q1atWmnDhg03bKOQAQAAVI4yC9mwYcNkt9s1ffr0nysPAABAjVNmIevRo4e8vLxKrXO5XPLy8tKWLVs8GgwAAKCmKLOQbd269efKAQAAUGOVWcgSExM1depUxcTE3DBStmrVKo8GAwAAqCnKLGTPPvusJOnNN9/8WcIAAADURGUWsgYNGkiSnE6nUlNTdfz4cTVv3lwvv/zyzxIOAACgJijXo5MmTZqk6OhorVixQr1799akSZM8nQsAAKDGKFch8/HxUefOnRUQEKCuXbvK6XR6OhcAAECNUeYly+3bt0uSateurXfffVft27fX7t273ZcyAQAA8NOVWcjWr18vSQoKCtLRo0d19OhRSZLFYvF8MgAAgBqizEI2Y8aMm64/f/68R8IAAADURGUWsmvmzJmjFStWqLi4WIWFhbr33nvdo2cAAAD4aco1qT8rK0tZWVnq06ePNmzYoEaNGnk6FwAAQI1RrkIWFBQki8WivLw8BQcHq6CgwNO5AAAAaoxyFbK7775ba9asUe3atTVr1izZbDZP5wIAAKgxyjWHLDExUWfPnlWPHj30wQcf6I9//KOncwEAANQY5Spkly9f1tKlS92PTmIOGQAAQOUp1yXL8ePHq1mzZhozZowaNWqk8ePHezoXAABAjVGuEbKioiI99dRTkqT7779fmzdv9mgoAACAmqTMQnbs2DFJUr169bRx40a1a9dOu3fvVpMmTX6WcAAAADVBmYVs6tSp7q9XrFihlStXyuVyycvLy+PBAAAAaooyC1laWpr769zcXH3zzTdq0qSJ6tev7/FgAAAANUW5JvVv3LhR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OTlZVqtV06dP1969e9WgQQOdOnVK8+fPlyRNnjxZDodDXl5emjJliu6//35FRUUpNDRUISEh+uijj7R69WoFBQVpxYoVys/P19NPP23qowFQRVDIAFR558+fV9OmTUutq1Onjk6ePKnw8HANGDBARUVF6tSpk8aMGaP/+q//0tGjR/Xoo49q4MCBSk5O1n333afVq1frz3/+s1q1aqVLly5pzZo1+u677/T4449LklJTUzV48GA99thjOnDggCZNmqSMjAydOXNGGRkZqlevngIDA7V+/XrFx8dr7dq1euedd0x8JACqGAoZgCqvcePG2r9/f6l133zzjc6ePas9e/bo008/ldVqld1uv+HYI0eOaPr06ZKk4uJihYSE6OjRowoPD5ck1a9fX6Ghoe5927dvL0n65S9/qbNnz0qS6tWr534GbHR0tF588UW1b99eDRo0UIMGDTzzpgFUK8whA1DlRUVF6eOPP9bXX38t6WqxSklJ0YEDBxQQEKBZs2ZpxIgRKiwslMvlkre3t5xOpyQpJCREr7/+utLS0vTyyy+rc+fOat68ufuh7ZcvX9bx48clXX1YfXZ2tiTpwIED7rL1w+drNm7cWAEBAVqwYIGio6N/ro8AQBXHnfoBVAt79+5VamqqXC6X8vLyFBUVpR49emjs2LGqU6eOateurTNnzmjJkiX69ttv9eKLL+r3v/+9goOD9frrr6ukpESS9Nprr+nee+9VYmKiu3Tt3r1bq1evVnFxsV599VXZ7XY5HA5NmTJFrVq10sMPP6wdO3a4s/z9739XUlKStm3bJh8fH1MfCYAqhEIGANc5cuSIDh48qF69eik3N1e9e/fWtm3bZLFYynX8hg0b9NVXX90xDy0GcOejkAHAdfLz8zVu3Dh9++23Kikp0aBBg9SvX79yHfvmm28qOztb8+bNU1BQkIeTAqguKGQAAACGMakfAADAMAoZAACAYRQyAAAAwyhkAAAAhlHIAAAADKOQAQAAGPZ/M+tJx/D/j8sAAAAASUVORK5CYII=%0A">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">H_p</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">H_q</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">H_pq</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="n">KL</span> <span class="o">=</span> <span class="n">kullback_leibler</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">H_p</span><span class="p">,</span> <span class="n">H_q</span><span class="p">,</span> <span class="n">H_pq</span><span class="p">,</span> <span class="n">KL</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[2.0300038236291735, 1.964403296720554, 3.1413716792524164, 1.1113678556232716]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now that we uncorrelated $q$ to $p$, we observe that the cross entropy is significantly larger than the entropies of the individual random variables. In addition, the KL divergence reflects this phenomenon and is close to $0.5$ nats.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us illustrate cross entropy applied to the classification problem now, once again using $k=10$:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> 
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">q</span> <span class="o">/=</span> <span class="n">q</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">H_p</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="n">H_q</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="n">H_pq</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="n">KL</span> <span class="o">=</span> <span class="n">kullback_leibler</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">H_p</span><span class="p">,</span><span class="n">H_q</span><span class="p">,</span><span class="n">H_pq</span><span class="p">,</span><span class="n">KL</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Distribution p is given by "</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Distribution q is given by "</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"[Entropy of p, Entropy of q, Cross Entropy, Kullback-Leibler]= "</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Distribution p is given by [1. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+Distribution q is given by [0.00214268 0.12904441 0.06231887 0.04902305 0.17766853 0.12523087
+ 0.03257186 0.1531452  0.2031986  0.06565594]
+[Entropy of p, Entropy of q, Cross Entropy, Kullback-Leibler]= [4.46858580e-13 2.98184917e+00 6.14569918e+00 6.14569918e+00]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Distribution $q$ has very little correlation to $p$, which is evidenced by the high value of the cross entropy and the Kullback-Leibler Divergence. In the classification problem, something curious happens. Since a certain outcome has null entropy, the cross entropy becomes</p>
+$$
+    H_{p,q} = H(X) + D(p||q) = D(p||q),
+$$<p>which means the cross entropy and the KL Divergence end up displaying numerical equality. They are still different quantities, but they display the same outcome. And we could define the classification problem as being an optimization with regard to the KL Divergence. We could also define it based on the log-loss function. All three perspectives yield the same end result, but the cross entropy, the KL Divergence and the log-loss function are distinct quantities.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us now visualize the cross entropy graphically for a given domain. Let us work on the same classification problem. We will modulate the probabilities of the first two states only and fix all the remaining to zero (we are saying that the remaining eight states are unreachable). This is done to reduce to number of degrees of freedom and to facilitate the observation of the phenomenon. Through this approach, we are de facto working within a binary subspace. This problem could be reframed as a standard binary classification problem between states $a$ and $b$. But we will keep the remaining variables to show that the visualization that we present can be made much more general.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">nel</span> <span class="o">=</span> <span class="mi">99</span> <span class="c1"># p = 0, 0.01, ..., 0.99</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># ground truth - state b was selected</span>
+<span class="n">p_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="n">nel</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">8</span> <span class="c1"># padding - fixed zero probability states</span>
+<span class="n">p_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">([</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">],</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="s1">'constant'</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">p_list</span><span class="p">]</span>
+<span class="n">H_pq</span> <span class="o">=</span> <span class="p">[</span><span class="n">cross_entropy</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">p_set</span><span class="p">]</span> 
+<span class="n">KL</span> <span class="o">=</span> <span class="p">[</span><span class="n">kullback_leibler</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">eps</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">p_set</span><span class="p">]</span>
+<span class="n">dic_pq</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'P(x=1)'</span><span class="p">:</span><span class="n">p_list</span><span class="p">,</span> <span class="s1">'H_pq'</span><span class="p">:</span><span class="n">H_pq</span><span class="p">}</span>
+<span class="n">dic_KL</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'P(x=1)'</span><span class="p">:</span><span class="n">p_list</span><span class="p">,</span> <span class="s1">'KL'</span><span class="p">:</span><span class="n">KL</span><span class="p">}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dfcross_entropy</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic_pq</span><span class="p">)</span> <span class="c1"># plotting the Cross Entropy and the KL Divergence</span>
+<span class="n">dfkullback_leibler</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic_KL</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">"whitegrid"</span><span class="p">)</span>
+<span class="n">fig_dims</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="n">fig_dims</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">xticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">"P(x=1)"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">"H_pq"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dfcross_entropy</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Cross Entropy'</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">xticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">"P(x=1)"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">"KL"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">dfkullback_leibler</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Kullback-Leibler Divergence'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Text(0.5, 1.0, 'Kullback-Leibler Divergence')</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmIAAAF/CAYAAADq9qU+AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4yLjIsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+WH4yJAAAgAElEQVR4nOzdd3iN9/8/8Od9TvaWQRBEgkwjkig1q1aNorUjRuzaWnu2VpVa0dizsaIILR2qVS2+ZJFph4iRYWTKPOf3Ryq/+giCnHPf55zn47p6Xc2JnNczJ/L2Ovf9vu+XoFQqlSAiIiIitZOJHYCIiIhIV7ERIyIiIhIJGzEiIiIikbARIyIiIhIJGzEiIiIikbARIyIiIhIJGzEdV1xcjO3bt+OTTz5B9+7d0blzZyxfvhwFBQVqzXHo0CF4e3uje/fuz/03bdq0137tunXr8Pvvv6shJZHuSk5OhpeX13OPHT9+HO+99x7OnTv3yq8NDAzEV199BQBo27YtYmJicP78eXTt2rXC8rm4uODRo0ev/XPP6r+JNWvWIDQ09JV1Dh06hFGjRr3R8/6vwMBANG3atHT969KlC6ZMmYJbt26V/pnu3bsjMzPzneqQtOiJHYDEtWDBAmRkZGDnzp0wNzdHbm4uvvjiC8yePRvLly9XaxYfHx9s3Ljxjb/u/PnzqFOnjgoSEdHL7Nu3D0FBQdixYwfc3NzEjqNSEydOVFutzp07Y968eaUfh4aGYvDgwTh27BjMzMxw5MgRtWUh9WAjpsOSk5Px448/4p9//oGZmRkAwMTEBF9++SUiIyMBADNmzMCTJ09w584dtGnTBqNHj8aXX36Jy5cvQxAEtGzZElOmTIGenh7Wrl2LEydOQF9fH5UqVcLSpUtRuXLllz7+JmbMmAEzMzNcuXIFDx48gIuLC5YtW4bQ0FDExsbim2++gVwux8mTJ8ud193dHSNGjMDff/+N3NxcTJkyBR06dMDQoUPx0UcfoU+fPgCAoKAgPHnyBLNmzarYHwCRhtq0aRMOHTqEPXv2wMHBAUDJG6KFCxfip59+KvPjsuTm5mLChAm4ffs2LCws8NVXX6F27dpITEzEV199hZycHKSlpcHV1RWrV6+GoaEhLl26hEWLFuHp06fQ19fHtGnT0KxZs9LnTEtLw9ChQ9G/f3/4+fm90fd14MAB7N27FwqFAlZWVpg7dy6cnZ0xY8YM1K1bF8OGDQMArF69GjExMVAoFJg0aRI++OCD554nKysLixcvxtWrV1FYWIhmzZph2rRp0NPTg6enJz788ENcvnwZK1asQP369V+ZqUePHjh69Ch+/PFH9O/fHy4uLjh37hw+++wzDB06FB07dgSA0jfOU6dOfeX38d/1cdiwYZg5cyaSkpJgZWUFOzs71K1bF+PHj8eNGzewePFiPHnyBMXFxfD390evXr1w/vx5rFq1CjVq1MC1a9dQVFSEL7/8Et7e3sjJycGiRYsQGRkJuVyOdu3aYfLkySgsLMSKFSsQFhaG4uJiuLu7Y86cOaX/7ug6nprUYXFxcahTp84Lvwx2dnalv9wAkJeXh2PHjmHq1KlYtGgRrKys8OOPP+LgwYO4cuUKtm3bhvv372Pnzp04ePAgDh06hObNmyM6Ovqlj5clPDz8hVOTBw8eLP18bGwstm7diuPHj+Pu3bv45Zdf4OfnB09PT0ybNg3t27cvd16g5LSssbExDh06hNWrV2PWrFl49OgR/Pz8EBISAgBQKBT44Ycf0K9fvwp97Yk01TfffINvv/0W/v7+pU3Y27p//z6GDBmCI0eOoGvXrqVbEUJCQtCjRw+EhITgt99+Q3JyMk6dOoXCwkKMHTsWY8eOxU8//YSFCxdiyZIlUCgUAICUlBQMGTIEI0eOfOMm7MKFCwgNDcXu3bsRGhqK4cOHY9y4cWX+WQcHBxw+fBjLly/HjBkzXjhVuWTJEnh4eODQoUMIDQ3F48ePsX37dgBAYWEhPvjgA/z666+vbcKecXFxwdWrV597rHfv3jh06BCAkrXs6NGj6N2792u/j/9dH+vUqYOff/4Za9asKX0DXlRUhAkTJuDzzz/HoUOHEBwcjG3btuHixYsAgOjoaAQEBCA0NBSffPIJVq1aBQBYu3Yt8vPzcfz4cYSGhiIyMhIXLlzApk2bIJfLcejQIRw9ehSVK1fGihUryvW96wIeEdNhMpmsdAF7FW9v79L/P336NPbu3QtBEGBgYIB+/fph586dGD58OFxdXdGzZ0+0atUKrVq1QrNmzaBQKMp8vCyvOzXZsmVLGBgYAADq1auHjIyMt847cuRIAMDAgQMBAK6urqhXrx7CwsLQrl07LF68GJcvX0ZKSgocHBzg5OT02teJSNvl5ubi6tWr2LRpEyZPngwvLy+4u7u/9fO5uLigcePGAICePXtiwYIFyMrKwtSpU3HmzBls3rwZt27dQmpqamltmUyGNm3aAAA8PT3x448/lj7fiBEjYG9vj27dur1xllOnTuH27dvPvenKzMzEkydPXviz/fv3B1CyDjk7OyMqKuqF54qJicEPP/wAoKT5+S8fH583yiYIAoyMjJ57rHPnzvjmm2+QlpaG+Ph4ODo6wtHRESEhIa/8Pv67Pv711184fPgwAKBy5cro1KkTAODWrVtISkp67ixAXl4e4uPj4ezsjGrVqpWejnZ3dy99jrNnz2LmzJmQy+WQy+UIDg4GUHK0LisrC2fPngVQ0oza2Ni80WugzdiI6bAGDRrg5s2byM7Ofu6oWEpKCubOnYu1a9cCKDld+YxCoYAgCM99XFRUBJlMhuDgYMTExODcuXNYsmQJWrZsiWnTpr308Tf134VIEAS8bExqefI+I5fLn/vcswWkb9+++OGHH5CamsqjYUT/MjIywvr166Gvr49Ro0Zh3LhxOHToEKysrF74nSwsLHzt88lkz5+UEQQBenp6mDJlCoqLi/HRRx+hTZs2uH//PpRKJeRy+XO/zwBw9erV0jdKX331FTZs2IDt27cjICAAJ0+eLF3HKleujM2bN780i0KhQPfu3TF16tTSj1NTU2FpafnK3AqFAnp6z/9TqlAosGbNGjg7OwMoaYT+m/u/a1R5xMTE4NNPP33uMWNjY3Ts2BE//fQToqKi0Lt373J9H/+traen99zP7Nn3VVxcDHNz8+f2o6Wnp8Pc3BwXL1586Vqsp6f33Pd5//59GBkZQaFQYNasWWjdujUAICcnB/n5+W/0GmgznprUYVWqVEG3bt0wa9YsZGdnAwCys7OxYMECWFlZvfAODABatGiB4OBgKJVKFBQUICQkBO+//z4uX76Mrl27wtnZGaNGjcKQIUMQExPz0scrklwuf665Kk/eZ55dCRUXF4fExET4+voCKDns//vvvyMuLq70lCeRrpPJZNDX1wcAjBw5EnXq1MHnn38OhUIBa2tr3Lt3Dw8fPoRSqcSxY8de+3xXrlxBQkICAGD//v3w9vaGsbEx/vnnH4wdOxadO3cGAFy6dAnFxcVwcnKCIAg4c+YMgJLf28GDB5ce2W/UqBG+/vprrF+/HlevXsWHH36II0eO4MiRI69swoCSteLYsWNITU0FAOzduxeDBw8u888+OwIUFxeHpKQkNGzY8IXn2rFjR+m6M2bMmNKjQ2/qwIEDSE5OxkcfffTC5/r06YPDhw8jMjKydDvJm3wfrVu3Lj1q9/jxY/z+++8QBAG1a9eGkZFRaSN2//59dO3aFbGxsa/M2qxZMxw+fBgKhQIFBQWYMGECwsLC0KJFC+zevRsFBQVQKBSYO3cuVq5c+VavhzbiETEdN3/+fAQFBaFfv36Qy+UoKChAu3btMH78+DL//Jw5c7Bo0SJ069YNhYWFaNmyJUaPHg0DAwN89NFH+PTTT2FiYgIjIyPMmTMHrq6uZT5elmd7xP7r2b6CV2nbti1WrlxZ5jvwl+V9JjIyEiEhIVAoFFi1alXpu0YbGxt4enrC2dm59B8eIvr/BEHAsmXL0LNnT6xevRpTpkxBv3798Omnn8LOzg5t2rR57ZsuJycnrFu3Dnfu3IGNjQ2+/vprAMDkyZMxduxYmJiYwMzMDL6+vkhKSoKBgQECAwOxZMkSfPPNN9DX10dgYGDploVnz/nZZ5+Vblr/7+eeGThw4HNHtb744gv4+flhxIgRCAgIgCAIMDMzw7p16144AgcAd+7cQY8ePSAIAlauXAkrK6vnPj979mwsXry4dN15//33MXz48HK9rsePH0dERAQEQYBCoUDt2rWxa9cuGBoavvBnPT09IZfL0alTp9LPt2jRotzfx8yZMzFnzhx069YNVlZWqFatGoyMjGBgYICgoCAsXrwYW7ZsQVFRESZOnAhvb2+cP3/+pdnHjRuHxYsXo3v37iguLkbnzp3RoUMHtGrVqvTvSnFxMdzc3DBjxoxyvR66QFC+7PwOkZZ7dvWRtbX1C5979OgRevXqhd27d6Nq1aoipCMiUq3du3fD3d0dXl5eKCgowIABAzB+/PjSU4ikHjwiRvQ/QkJCsHLlSowfP55NGBFprTp16mDhwoVQKBQoLCxEp06d2ISJgEfEiIiIiETCzfpEREREImEjRkRERCQSNmJEREREIpHsZv3IyEgYGxurvE5+fn6ZlwVrWg111dGWGuqqoy011FUnPz8fjRo1UmkNdVHHGqZtP3ttqKGuOtpSQ111pLx+SbYREwShdISCKiUkJKi8jjpqqKuOttRQVx1tqaGuOs9u7qkN1LGGadvPXhtqqKuOttRQVx0pr188NUlEREQkEjZiRERERCJhI0ZEREQkEjZiRERERCJhI0ZEREQkEjZiRERERCJRye0riouLMWfOHCQmJkIul2Pp0qXIysrC6NGj4ejoCADo378/OnfurIryRERvjesXEamTShqxP//8EwCwb98+nD9/HkuXLkXbtm0xdOhQBAQEqKIkEVGF4PpFROokKJVKpSqeuKioCHp6ejh8+DAiIyMhk8mQmJiI4uJi1KpVC7NmzYKZmdlLvz4iIgImJiaqiPacvLw8GBkZaXwNddXRlhrqqqMtNdRZRx03kHydd12/APWsYdr0s9eWGuqqoy011FVH0uuXUoWmTZum9PLyUv7999/KH374QRkTE6NUKpXKoKAg5ddff/3Kr42MjFRltFLx8fFaUUNddbSlhrrqaEsNddVR1/dSHu+yfimV6lnD+LOXXg111dGWGuqqI+UaKt2sv2zZMvz666+YO3cuWrRoAU9PTwBA+/btER8fr8rSRETvhOsXEamDShqx0NBQbNy4EQBgbGwMQRAwbtw4REdHAwDOnTsHDw+PVz5HQZECStWcNSUieqmKWL8AQMH1i4jKQSWb9Tt06ICZM2fCz88PRUVFmDVrFqpWrYqFCxdCX18ftra2WLhw4Suf49aTQkSdvonRrZ1VEZGIqEwVsX4BwN3MQjRSKCGXCWpITUSaSiWNmImJCdasWfPC4/v27Sv3c5gbyjDj58twtDFFJ0/7ioxHRPRSFbF+AcDTQiUC/7iGSe3qVVQ0ItJCkr2haxUzPTSqYYVJ+6MQk5whdhwiojdiYSjD2pPXcP7mQ7GjEJGESbYRkwkCNvn7wMbUEMN2huF+xlOxIxERlVtlMz3UtDbBpP0X8SinQOw4RCRRkm3EAMDO3BBbh/ggt6AYw3aEIye/SOxIRETlIhMEBPZvjIfZBZgSchEKBTfvE9GLJN2IAYCrvQUCB3jh8oNMTNx3EcVczIhIQ9R3sMTcrm44dSUNG07fEDsOEUmQ5BsxAPjApTLmdXXH7wkpWPbLZbHjEBGV28CmtdC1QVWs+PUK/o/7xYjof2hEIwYAQ5rXxqBmtbDp9E3su5AkdhwionIRBAFLP6mPWjamGL83CqlZeWJHIiIJ0ZhGDADmdXVHq3p2mBMai7PX08WOQ0RULuZG+lg/sDGy8goxce9FFBUrxI5ERBKhUY2YnlyGdQO8UNvWFKODI3AjLVvsSERE5eJqb4FFPerj3M2HWPX7VbHjEJFEaFQjBgAWRvrYNsQX+nIZAnaE4TEvCyciDdHL2wH9m9TAd3/ewMmEFLHjEJEEaFwjBgA1rE2waZAP7mfkYVRwBPKLisWORERULvO7ecCzugUm77+IpIe5YschIpFpZCMGAN61KmF5rwa4kPgIsw7FckA4EWkEI3051vt5AwDG7I5AXiHfSBLpMo1txACge6PqmNSuLg5GJmP9X7xHDxFphhrWJljdrxHi7mVi3pFYseMQkYg0uhEDgIkf1sXHDavhm1+u4OeY+2LHISIql7auVTC+bR2EhCfzljxEOkzjGzFBEPBNrwZoXNMKk0MuIjr5idiRiIjKZVK7emhZ1xbzjsRx7SLSURrfiAEley42DfKBrZkhhu0Mx70nHBBORNInlwlY288LduaGGBMcyeHgRDpIKxoxALA1M8TWwb54WlCMYTvDkc0B4USkASqZGmD9wMZIy8rHxH1RnKdLpGO0phEDABd7c6wb4IUrDzIxiQsaEWmIBg5W+Kq7B/6+lo6VJ66IHYeI1EirGjEAaONSGV9+7IHfE1Kx9HiC2HGIiMqlX5Oa6OdbcrPX3+IeiB2HiNRE6xoxAPBv5ogh7ztiyz+J2HOeVyMRkWZY8LEHGjhY4vOQS7jJEW5EOkErGzEAmNPFDW1c7DDvSCzOcEA4EWkAI305gvwaQ08uYNT3EcjhXlcirae1jZieXIbA/l5wtjPD6OAIXE/lu0sikj6HSiYI7N8YN9KyMe1gNKeGEGk5rW3EAMDcSB9bh/jAUK9kQDgvDSciTdCiri2mdXLFsej72PJ3othxiEiFtLoRA0reXW4a5IMHmXkY9X04B4QTkUYY1coJH3naY+nPCTjL7RVEWkvrGzEAaFyzEr7t3RBhtx5j5sEYHuonIskTBAHLezeEk50Zxu2Nwl3eqJpIK+lEIwYA3RpWw5T29XAo6i6++/O62HGIiF7LzFAPG/29UVikwJjgCOQV8og+kbbRmUYMAMa3rYOeXtWx4rer+Cn6nthxiIhey9nODCv7NkJ0cgbmhsbyiD6RltGpRkwQBHz9aX341KqEz0MuISrpsdiRiIheq717FUxoWwcHIpIRzHsjEmkVnWrEAMBQT46N/t6obGGIEbsikJJdKHYkIqLXmtSuHj5wscNXP8Yh/NYjseMQUQXRuUYMAGzMDLFtsC/yi4qx4I8UDggnIsmTyQSs7ueF6lbGGLM7EimZeWJHIqIKoJONGADUrWKOIL/GSHpSgAl7OSCciKTP0lgfG/19kJNfhDHBESgs5rpFpOl0thEDgJZ17fDZe7b443IqFh2LFzsOEdFrudibY3mvhohMeoINF3h/MSJNp9ONGAB0cbHA0OaO2H7mFoL/77bYcYiIXqtLg6oY3doZx69mYd8Fbt4n0mQ634gBwJwu7mjrWhnzj8bh9NU0seMQEb3W1I4uaFzNGPOOxCGSV4ATaSw2YgDkMgFr+3uhbmUzjN0diWspWWJHIiJ6JblMwIxWlWFvaYTR30cglZv3iTQSG7F/mRnqYesQXxjqyxGwMwwPs/PFjkRE9ErmhnJsGuSNrLwijNkdiYIihdiRiOgNqaQRKy4uxsyZM9GvXz/4+fkhKSkJt2/fRv/+/TFgwADMnz8fCoX0FozqVsbYMtgHqZn5GPk9x4kQ6SJNW79c7S2wvHcDRNx+jC9/jBM7DhG9IZU0Yn/++ScAYN++fZgwYQKWLl2KpUuXYtKkSdizZw+USiVOnjypitLvrFENK6zs0wgRtx9jxsFojhMh0jGauH51bVANo1o7Yff5JG7eJ9IwKmnE2rVrh4ULFwIA7t27B1tbW8TFxaFJkyYAgFatWuHs2bOqKF0hujSoii861EPoxXsI/IMDwol0iaauX9M6uqJlXVvMPRKLiNvcvE+kKfRU9sR6epg+fTpOnDiBtWvX4s8//4QgCAAAU1NTZGW9ekO8QqFAQkKCquKVysvLK7NOW3slopzNsPLEVRjkP0Hr2mYVXqOiqaOOttRQVx1tqaHOOlLwrusXoJ417H9/JuO9TXHt/hOM2HEea7tWh41JxSzx2vL3WJt+V7SlhrrqSHr9UqpYamqqsk2bNkofH5/Sx06cOKH88ssvX/l1kZGRqo6mVCqVyvj4+Jd+Lq+wSNlr/Rll3dnHlRG3H6mkRkVSRx1tqaGuOtpSQ1111PW9lNfbrl9KpXrWsLJer4T7GUq3uT8re3z3jzKvsEhldSqattRQVx1tqaGuOlKuoZJTk6Ghodi4cSMAwNjYGIIgwNPTE+fPnwcAnD59Gj4+PqooXaFKBoT7wN7CCCN3hSP5ca7YkYhIxTR9/XK1t8CK3g0RlfQE84/EcZ8rkcSppBHr0KED4uPj4efnh2HDhmHWrFmYN28eAgMD0bdvXxQWFqJjx46qKF3hrE0NsG2IL/KLFBi2IxxZeYViRyIiFdKG9atz/aoY+4Ez9oXdwe7z3LxPJGUq2SNmYmKCNWvWvPB4cHCwKsqpXJ3KZljv543B2y9g/N4obBnkAz05b8FGpI20Zf2a0t4F8fcyseBoHOpVMUeT2tZiRyKiMrCbKKcWdW2xsLsnTl1Jw6JjEt3wR0T0L7lMwOp+XqhhbYLPdkfg3pOnYkciojKwEXsDA96rieEtamPH2VvYde6W2HGIiF7J0lgfmwd5I69QgdHBvEk1kRSxEXtDMzu7oZ1bFSw4GodTV1LFjkNE9Ep1KptjZZ+GiE7OwKzDMdy8TyQxbMTekFwmYE2/RnC1t8C4PVG48oADwolI2jp42GNyu3o4FHkX287cEjsOEf0HG7G3YGqohy2DfWBiIEfAjjCkc0A4EUnc+LZ10NGjCpYcT8CZ6+lixyGif7ERe0vV/h0Q/jAnHyN2hXPvBRFJmkwm4Ns+jeBsZ4qxeyKR9JD3RSSSAjZi76CBgxVW9WmEqKQnmPYDB4QTkbSZGephk78PFAolRn4fjpz8IrEjEek8NmLv6KP6VTG1owuOXrqH1b9fEzsOEdErOdqaYt2AxriakoUvDlziG0gikbERqwCftXHGp40dsObkNRy5eFfsOEREr9Sqnh1mfOSKn2MfYN0f18WOQ6TT2IhVAEEQsPST+mhS2xpTD0Qj4vYjsSMREb3SiJZO6NGoGr49cRUn4lPEjkOks9iIVRADPRk2DvRGNSsjjNwVgTuPuBGWiKRLEAR8/WkD1K9uicn7L+JaCm/FQyQGNmIVqJKpAbYO8UVhsQIBO8KQyQHhRCRhRvpybPT3hpG+DCN2hSMjl2sWkbqxEatgznZm2ODvjcT0HIzbE4WiYoXYkYiIXqqalTHWD/TG3SdPMX5fFIoV3LxPpE5sxFTgfWdbLO7pidNX0/DVT/FixyEieiVfR2t81b1kzfrml8tixyHSKXpiB9BWfX1r4kZaDjadvgmTYhu4uYmdiIjo5fo3qYn4e5nYePom3KpaoIdXdbEjEekEHhFToemdXNHevQo2hT3En5c5IJyIpG1eN3c0qW2N6QejEZ38ROw4RDqBjZgKPRsQXruSAcbvjcLlB5liRyIieil9uQzr/RrD1swQI3dFIDUrT+xIRFqPjZiKmRjoYX5be5gayjFsRzgXNiKSNBszQ2wa5I2Mp4UY/X0E8os4R5dIldiIqYGdqR62DPLFo5wCjNwVwQHhRCRpHtUssaJ3Q0QmPcG80DiOQSJSITZialLfwRKr+jbCxTtP8PmBS1DwEnEikrAuDapifNs62B9+B0cvc1sFkaqwEVOjTp72mN7JFcei72PV71fFjkNE9EqT29UrveDozPV0seMQaSU2Ymo2urUT+vg4IPCP6zgclSx2HCKil5LJBKzq2wg1LPUxdk8kkh5ydBtRRWMjpmaCIGBRj/po6mSN6T/EIOwWB4QTkXSZGeph3gf2UCqB4bvCkJ1fJHYkIq3CRkwEBnoybBjojeqVjDHq+wi+yyQiSatmoY/vBjTGjbQcTN5/kXtciSoQGzGRWJkYYNsQXxQrlAjYGYaMpxy2S0TS1aKuLeZ0ccOJ+BTucSWqQGzERFTb1hQbBnrj9sMcjNsTiUIOCCciCRvyvmPpHtefou+JHYdIK7ARE1kzZxss7lkff19Lx4KjvF8PEUmXIAhY2MMT3rUq4YsDlxB7N0PsSEQaj42YBPTxqYFRrZ2w+3wStp+5JXYcIqKXMtSTY8NAb1QyMcDIXeFIy8oXOxKRRmMjJhHTO7qio0cVLDoWjz8up4gdh4jopezMDbF5kA8e5RZgTHAECoq4rYLobbERk4hn9+txr2aB8XuiEH+Pd7ImIunyrG6J5b0aIvz2Y8w7EsttFURviY2YhJgYlMykNDPSw/CdYUjN5IBwIpKubg2rYdwHdbAv7A52nr0ldhwijcRGTGLsLY2wdbAvHucWYsSucDwt4IBwIpKuKe1LxiAtPJaAf65xDBLRm2IjJkGe1S2xpl8jRN/NwOcHePNEIpKuZ9sqnO1MMXZPJG6l54gdiUijsBGTqA4e9pj5kSuOxzzAyhO8eSIRSZeZYcm2CkEAhu8KR1Yeb1BNVF5sxCRsREsn9POtgXV/XsfBCA4IJyLpqmljgiC/xriVnoOJ+y6imEfyicpFr6KfsLCwELNmzcLdu3dRUFCAMWPGwN7eHqNHj4ajoyMAoH///ujcuXNFl9Y6z26emPQoFzMORaOGtQma1LYWOxaRVuMa9vbed7bF/I89MDc0Fst/vYIZH7mKHYlI8iq8ETt69CisrKywfPlyPH78GD179sTYsWMxdOhQBAQEVHQ5racvl2G9nzd6rj+DUd+HI3Rsc9SyMRU7FpHW4hr2bvyb1sKVB5nY8NcNuNiboaeXg9iRiCStwk9NdurUCRMnTiz9WC6XIzY2FqdOnYKfnx9mzZqF7Ozsii6r1SxN9LFtsC+UAAJ2cEA4kSpxDXt387t5oKmTNaYfjEFU0mOx4xBJmqBU0V34srOzMWbMGPTp0wcFBQVwcXGBp6cn1q9fj8zMTEyfPv2VXx8REQETExNVRHtOXl4ejIyMNKJGzIOnmHXiPjyrGGNhO3voyQSV1HkVbamhrjraUkOdddzc3FReozw0YQ2T8s8+I68Yk47dRUGxEnzytgEAACAASURBVGu6VIet6atPwPB3RTdrqKuOpNcvpQrcu3dP2bNnT+WBAweUSqVSmZGRUfq5a9euKQcNGvTa54iMjFRFtBfEx8drVI2QsCRlrek/KWceilYqFAqV1XkZbamhrjraUkNdddT1vbyOpqxhUv/ZX76fqXSf+7OyW+DfyqcFRSqp8Sak/nrpYg111ZFyjQo/NZmeno6AgABMnToVvXr1AgAMGzYM0dHRAIBz587Bw8OjosvqjN4+NTCmjTP2nE/C1n8SxY5DpHW4hlUcF3tzrOrbCDF3MzDth2iOQSIqQ4Vv1t+wYQMyMzMRFBSEoKAgAMCMGTOwZMkS6Ovrw9bWFgsXLqzosjplagcX3ErPweLjCahlY4r27lXEjkSkNbiGVawOHvb4ooMLlv96BS725hj7QR2xIxFJSoU3YnPmzMGcOXNeeHzfvn0VXUpnyWQCVvZphHubzmHivigcGN0MHtUsxY5FpBW4hlW8z9o448qDLCz/9QrqVjZDBw97sSMRSQZv6KqhjA3k2DzIB5bG+hi2IxwpHBBORBIlCAK+6dUADR0sMWn/RSTczxQ7EpFksBHTYJUtSgaEZ+YVYvjOcOQVKcSORERUJiN9OTYN8oG5kR6G7wzHw+x8sSMRSQIbMQ3nXs0Ca/t5IfZeBlb8ncoB4UQkWVUsjLDJ3wfp2fkYExyJAr55JGIjpg3auVfB7M5uOJOUixW/XRE7DhHRSzWsYYVvejXAhVuPMO9ILK+kJJ3HRkxLDGtRGx/VM0fQqRs4EH5H7DhERC/VvVF1jP3AGfvC7mDH2VtixyESVYVfNUniEAQBn71niyyFIWYdjkENaxM0dbIROxYRUZk+b++CqynZWPhTPJztzGAndiAikfCImBbRkwn4zq8xalqbYHRwBBLTc8SORERUJplMwOq+jVCvijnG7olEckaB2JGIRMFGTMtYGutj2xBfCACG7QjDk1wubkQkTaaGetgy2AcGchkW/JGCjNxCsSMRqR0bMS1Uy8YUG/19kPz4Ka9MIiJJc6hkgg3+3kjJLsS4vZEoKuZ6RbqFjZiWalLbGks/qY9zNx9ibiivTCIi6fJ1tMa4prb4+1o6Fh1LEDsOkVpxs74W+9TbAYnpOVj353U42ZliVGtnsSMREZWpY10LZMvMseWfRNSrYo4B79UUOxKRWrAR03JT2tdD4sMcfP3LZTjamqIjZ7wRkUTN7OyGa6nZmHckFrVtTdHMmVd+k/bjqUktJ5MJ+LZ3QzRwsMKkfRcRezdD7EhERGWSywQEDvBCLRsTjNkdgdsPeeU3aT82YjrASF+OzYO8UclEH8N2huFBBgeEE5E0WRjpY+tgXwDAsJ3hyMzjlZSk3diI6YjK5kbYOsQX2XlFGL4rDLkFRWJHIiIqk6OtKYL8GuNWeg4m7o1CMWfokhZjI6ZD3KpaIHCAF+LvZWLSvoscEE5EkvW+sy2+7O6BP6+k4eufeSUlaS82YjqmrWsVzOnijt/iU7Ds18tixyEieim/92phcLNa2Px3IkLCOEOXtBOvmtRBQ5s74kZaNjb+dRNOtqbo68vLxIlImuZ2dcfN9BzMDo2Bo60pmtS2FjsSUYXiETEdJAgCFnzsgZZ1bTH7cCzO3kgXOxIRUZn05DKs698YNSqVzNC98yhX7EhEFYqNmI7Sl8uwbkBjONqaYkxwJG6mZYsdiYioTJYm+tgy2AdFxQoM2xmGLF5JSVqEjZgOszTWx7bBvpDLBATsCMPjHA4IJyJpcrIzQ5CfN26k5WDSvou8kpK0BhsxHVfTxgSb/L1x70keRgdHcEA4EUlWi7q2WNDNHScvp2LZL7zYiLQDGzGCj6M1vunVAOcTH2H24RgOCCciyfJv5gj/prWw6fRNhITzSkrSfLxqkgAAPbyq42ZaNtb+cR3Olc0wmgPCiUii5nVzR2J6DmYfjkFtW1P4OvJKStJcPCJGpSa3r4euDapi2S+X8UvsA7HjEBGVSV8uw3cDSq6kHPU9r6QkzcZGjEoJgoAVvRuiUQ0rTNofhZhkDggnImnilZSkLdiI0XOM9OXY5O8DG1NDDN/FAeFEJF1OdmZYP7DkSsqJvJKSNBQbMXqBnbkhtg7xQU5+MYbtDENOPgeEE5E0Na9jiwUfe+CPy6mcSUkaiY0YlcnVvmRAeML9TEzaz3eaRCRd/k05k5I0FxsxeqkPXCpjXld3nIhP4T17iEjS5nZ1LxnbFhqD8zcfih2HqNzYiNErDWleG4OaldyzZ9+FJLHjEBGVSe/fsW01rEtmUiY95JWUpBnYiNFrzevqjtb17DAnNBZR95+KHYeIqEzPxrYplMCwnWHI5JWUpAHYiNFrlbzT9IKTnSmWnErB9VQOCCciaXK0NcX6gY2RmJ6D8XuiUFTMsW0kbWzEqFzMjfSxdbAv5LKSd5ocEE5EUvW+sy0W9vDEX1fTsPg4r6QkaWMjRuVWw9oE8z+wx/2MPIwKjkB+UbHYkYiIytS/SU0ENK+N7WduYff522LHIXopzpqkN+JW2QjLezXAxH0XMetQLFb0bgBBEMSORVRhCgsLMWvWLNy9excFBQUYM2YM6tSpgxkzZkAQBNStWxfz58+HTMb3sVI3u4sbbqZnY/6RONS2MUUlsQMRlaHCGzEuYtqve6PqSEzPwerfr8HJzhRjP6gjdiSiCnP06FFYWVlh+fLlePz4MXr27AlXV1dMmjQJ7733HubNm4eTJ0+iffv2Ykel15DLBAT298InQWcxOjgC33ayh5vYoYj+R4V3Q88WsT179mDz5s1YuHAhli5dikmTJmHPnj1QKpU4efJkRZclNZv4YV183LAalv96Bcdj7osdh6jCdOrUCRMnTiz9WC6XIy4uDk2aNAEAtGrVCmfPnhUrHr0hcyN9bBviCz25DAv+SEFGLq+kJGmp8CNinTp1QseOHUs/LmsRO3PmDN9NajhBEPBNrwZIfpyLyfsvorqVMRrWsBI7FtE7MzU1BQBkZ2djwoQJmDRpEpYtW1Z6Ct7U1BRZWVmvfR6FQoGEBNVuFM/Ly1N5DXXVUXWNmS1tMfO3exi06TQWta8KPZnqtlRow+ulrhrqqqOu7+VtVHgjpkmLGKBdfwHE+F6mNrXEpOPZGLLt/7CmS3XYmb77Xyltfr00tYY660jB/fv3MXbsWAwYMADdunXD8uXLSz+Xk5MDCwuL1z6HTCaDm5tqT4QlJCSovIa66qi6hpsbcD+rECvPpGHv1WIs7uGpsv2t2vB6qauGuuqoq8bbUMlmfU1ZxADt+Qugrjpl1fi+ei18GnQWS888wYHRzWBm+G5/rbT99dLEGuqqI4VGLz09HQEBAZg3bx6aNWsGAHB3d8f58+fx3nvv4fTp02jatKnIKelttK9jjlw9C2z46wbq2JkhoEVtsSMRVfwesWeL2NSpU9GrVy8A/38RA4DTp0/Dx8enosuSiOpVMcc6v8a4mpKFiXujOCCcNNqGDRuQmZmJoKAg+Pv7w9/fH5MmTUJgYCD69u2LwsLC57ZfkGaZ1tEFHdyrYNGxePx5JVXsOEQVf0Tsv4tYUFAQAGD27NlYtGgRVq5cCScnJy5iWqh1PTvM7+aOeUfisOR4AuZ2dRc7EtFbmTNnDubMmfPC48HBwSKkoYomkwlY1bcRem84h/F7onDos/dRr4q52LFIh1V4I8ZFTHcNauaIm2k52PpPIpzsTOH3Xi2xIxERvcDUUA9bh/jg43VnELAjDEfGNoeNmaHYsUhH8WZeVKHmdHHDBy52mHckDv9cSxc7DhFRmapaGmPLIB+kZeVj1PecFELiYSNGFUpPLsPa/l6oY2eGMbsjcD319VfIEhGJoWENK3zbpyHCbz/GzIMxUCq5v5XUj40YVThzI31sHeIDQz05AnaE42F2vtiRiIjK1LVBNUxuVw+Hou4i6NQNseOQDmIjRirhUMkEmwd5IyUzD6M5IJyIJGzCh3XQvVHJpJBfYjkphNSLjRipjFfNSvi2T0OE3eJhfyKSLkEQsOzTBvCqaYVJ+y8iJjlD7EikQ9iIkUp1bVANU9qXHPb/7s/rYschIiqTkb4cm/x9YGNqiOG7wvAgI0/sSKQj2IiRyo1vWwc9vapjxW9X8VP0PbHjEBGVyc7cEFuH+CA7rwjDd4Uht6BI7EikA8rViN27d++l/xG9jiAI+PrT+vCpVQmfh1xCVNJjsSMREZXJ1d4CgQO8EH8vE1P2X4KCk0JIxcp1Q9cpU6YgOTkZLi4uuHHjBvT19WFtbQ1BELBv3z5VZyQtYKgnx0Z/b/QIOoMRuyIQOvZ9OFQyETsWEdEL2rpWwazOblh0LAHLf7uC6Z1cxY5EWqxcR8Ssra3x888/Y+vWrfj555/h7OyM/fv3swmjN2JjZohtg32RX1iM4TvDkZ3Pw/5EJE3DWtRG/yY1sf7UDfwQkSx2HNJi5WrEUlJSYG5eMovLyMgIDx8+VGko0l51q5gjaGBjXEvNxgQOCCciiRIEAV9190DzOjaYeSgaFxIfiR2JtFS5GrHmzZtj4MCB+Prrr+Hn54cuXbqoOhdpsZZ17fDlxx7443IqFh2LFzsOEVGZ9OUyBA3wRg1rE4z6Phy30nPEjkRaqNx7xKKjo3H37l307t0bzs7Oqs5FWm5g01q4mZaDbWcS4WRnBv+mHBBORNJjaaKPbYN90SPoDAJ2huHwmOawNNEXOxZpkXIdEUtMTMT69euxZs0arFmzBnfv3lV1LtIBs7u44UPXylhwNA6nr6aJHYd0xNSpU8WOQBrG0dYUGwZ6486jXIzdE4nCYoXYkUiLlKsRmz59Ovr164cDBw7gk08+wYwZM1Sdi3SAXCZgTX8v1K1shrG7I3E1hQPCSfUSExPFjkAaqKmTDRb3rI9/rqdj/tE4TgqhClOuRszY2BitW7eGubk52rRpA5mM94GlimFmqIetQ3xhqC9HwI4wpHNAOBFJVB+fGhjd2hl7zidh25lbYschLVGuPWJVq1ZFUFAQmjZtiri4OBgYGOCff/4BALRo0UKlAUn7VbcyxpbBPui78RxG7grH/FZWYkciLfBsjfovpVKJ7OxsEdKQtpjW0QWJ6dlYdCwejjYm+NCtitiRSMOVqxETBAF37tzBnTt3AAC2trY4duwYADZiVDEa1bDCyj6NMHZPJFadKcJ2DyUEQRA7FmmwzZs3o1q1ai88XlBQIEIa0hYymYBVfRuhz8ZzGL83Cj+Mfh/u1SzEjkUarFyN2NKlS8t8fP78+RUahnRblwZVkZheDyt+u4rAP65jwod1xY5EGuzRo0dYtWoVrK2tAZQcDVu/fj3Onj0rcjLSdCYGetg62Bfd153B8J1hCB3bHJUtjMSORRrqnTZ7cdMrVbSxH9TBh85mWHniKn68xFmm9PbGjh2LESNGIDs7G48fP8bw4cMRExODw4cPix2NtEAVCyNsGeyDx7mFGLErHE8LisWORBqqXEfEXoZXjVBFEwQBE5rZIavYAJ8fuITqlYzRuGYlsWORBurUqROKi4sxdOhQZGZmYtCgQfDz8xM7FmkRz+qWWNvfCyO/D8fnBy5iXf/GkMm4pYLezDsdEeMeHlIFA7mADf7eqGpphJG7wpH8OFfsSKShunTpgoEDB8LOzg69e/cWOw5pofbuVTDrIzccj3mAb09cETsOaaB3OiJGpCrWpgbYOtgXPYPOYNiOcPwwphnMjXg3ayq/KVOmQBAEKJVKJCUlYcCAAahVq2SCw7fffityOtImw1vWxs30bHz35w3UtjWDh4nYiUiTvLIRCw0NfennevTowVOTpFJ1KpthvZ83Bm+/gPF7o7BlkA/05LyHHZVPv379yvx/oopWMiDcE7cf5mLmoWgsbmcPNzexU5GmeGUjduPGjdL/P3bsWOmw72enJLdt26bCaERAi7q2WNjdE7MOx2DRsQQs+NhD7EikIZo0aSJ2BNIh+nIZ1vt5o+f6M1h4KgVN6ufA0dZU7FikAV7ZiH3++eel/3/x4sXnPgYAfX2eKiLVG/BeTdxMy8aWfxLhZGeKQc0cxY5ERPSCZwPCPw48jYAdYTj8GQeE0+uV+zwPN+aTmGZ2dkM7t5IB4aeupIodh4ioTI62ppj7QRXceZyL0cERKCjigHB6NW64IY0glwlY088LLvYWGLcnigPCiUiyPKsYY9mnDXDu5kPMDY3lfmp6pVeemvzvVUfXr19/7tQkrzoidTM11MPWwT7o8d0ZBOwouZu1rZmh2LGIiF7wSWMHJKbnIPCP63CyM8Wo1s5iRyKJemUjxquOSGqq/TsgvM+/A8L3jGgKI3252LGIiF4wuV093EzPwde/XEYtGxN08qwqdiSSoFc2YrzqiKSogYMVVvdthNHBkZj2QzTW9GvEPYxEJDkymYBvezfE3cdPMWn/RYRYGaOBg5XYsUhiuEeMNFInz6qY1skFRy/dw+rfr4kdh4ioTEb6cmwe5AMbU0MM2xmOe0+eih2JJIaNGGmsMa2d0cvbAWtOXsORi3fFjkNEVCY7c0NsG+KLpwXFCNgRhuz8IrEjkYSwESONJQgClvSsjya1rTH1h2hE3H4kdiQiojK52JvjO7/GuJaajQl7o1Cs4JWUVIKNGGk0Az0ZNg70RjVLI4zcFYE7jzggnIikqXU9Oyz42AN/XE7FomPxYschiVBZI3bp0iX4+/sDAOLi4tCyZUv4+/vD398fx48fV1VZ0kGVTA2wdYgvCosVCNgRhsy8QrEjkRbgGkaq4N+0FgKa18b2M7ew69wtseOQBLzyqsm3tXnzZhw9ehTGxsYAgPj4eAwdOhQBAQGqKEcEZzszbPD3xqCtFzBuTxS2DeaAcHp7XMNIlWZ3cUPSoxwsOBqHmtYmaONSWexIJCKV/EtVs2ZNBAYGln4cGxuLU6dOwc/PD7NmzUJ2drYqypKOe9/ZFot6eOL01TR89RMP+9Pb4xpGqvRsUojrv5NCLj/IFDsSiUhQqmj2QnJyMqZMmYKQkBAcPHgQLi4u8PT0xPr165GZmYnp06e/8usjIiJgYmKiimjPycvLg5GRkcbXUFcdTaixJfwhDsZlYHQTG3R3s1RZnfLQlhrqrOPm5qbyGuWhCWuYNv3staXGm9RJyynC5GN3IZcJWNWlGqyNy3+SShdfL6nXAN5y/VKqyJ07d5S9e/dWKpVKZUZGRunj165dUw4aNOi1Xx8ZGamqaM+Jj4/XihrqqqMJNYqKFcrhO8OUtWf8pPwjIUVldcpDW2qoq466vpfy0IQ1jD976dV40zoxyU+UrnN+Vn4c+LcyN79IJTXelhRfL22soZZNNMOGDUN0dDQA4Ny5c/Dw8FBHWdJRJYf9G8GtqgXG7+Vhf3p3XMNIVTyrW2Jtfy9E383A5P0XoeBtLXSOWhqxBQsWYMmSJfD390dkZCQ+++wzdZQlHWZioIctg31gaijHsB3hSM3KEzsSaTCuYaRK7d2rYE4Xd/wS9wDLfrksdhxSM5VcNQkADg4OCAkJAQB4eHhg3759qipFVKaqlsbYMsj33wHhEdg3kgPCqfy4hpE6BTR3RGJ6NjaevglHW1P0b1JT7EikJry+n7RafQdLrOrbCJeSn+DzA5d42J+IJEkQBCzo5oHW9ewwJzQW/1xLFzsSqQkbMdJ6nTztMb2TK45F38fq36+KHYeIqEx6chnWDfBCHTszjNkdgWspWWJHIjVgI0Y6YVQrJ/TxccDaP67jcFSy2HGIiMpkbqSPrUN8YKgnx9AdYUjLyhc7EqkYGzHSCYIgYFGP+mjmZIPpP8Qg/BYHhBORNDlUMsHWwT5Iz87HiF3hyCssFjsSqRAbMdIZBnoyrB/YGNUrGWPk9xG4n8WZlEQkTQ1rWGH1s/2tIdzfqs3YiJFOsTIxwLYhvihWKDH/5ANkPGUzRkTS1MmzKmZ+5IpjMfex4rcrYschFWEjRjqntq0pNgz0xv2sQozbE4nCYoXYkYiIyjSipRP6N6mJoFM3EBJ2R+w4pAJsxEgnNXO2wfimdvj7WjoWHI2DUjUjV4mI3okgCPiquwda1rXFrMMxOHOdt7XQNmzESGd1qGuO0a2dsft8EraduSV2HCKiMunLZfjOrzGc7cwwOpi3tdA2bMRIp03r6IJOHvZYdCweJxNSxI5DRFQmi/+5rcXjp0ViR6IKwkaMdJpMJmBl34bwqFYyIDz+HgeEE5E0/fe2Fl/+kcLbWmgJNmKk80wM9LB1sC8sjPQxfGcYUjM5IJyIpKnkthZeuJqejykhF3lbCy3ARowIQBULI2wZ7IPHuYUYsSscTwv4TpOIpKmTpz2G+VjjeMwDfPMrb2uh6diIEf3Ls7ol1vRrhOi7Gfj8AN9pEpF0feJuCb/3amLDXzew70KS2HHoHbARI/qPDh72mPmRK47HPMDKExwQTkTSJAgCvvzYA63r2WF2aCz+vpYmdiR6S2zEiP7HiJZO6OdbA+v+vI6DERwQTkTSpCeXYd0AL9StbIbPgiNx5QFva6GJ2IgR/Q9BELCwhyfed7bBjEPRuJDIAeFEJE3mRvrYNsQXxgZyBOwIQ2oWLzbSNGzEiMqgL5dhvZ83alQywajvw3ErPUfsSEREZapmZYytg33xKKcAw3fyYiNNw0aM6CUsTUreaSoBBOwMQ0YuB4QTkTTVd7DE2v5eiLmbgYn7olDMi400BhsxoldwtDXFxoHeuPMoF5/tieCAcCKSrPbuVTCvqzt+i0/BkuMJYsehcmIjRvQa7znZYOknDXDm+kPMO8IB4UQkXUOb18aQ9x2x9Z9EfH/ulthxqBz0xA5ApAl6eTvgZlo2gk7dgLOdKYa3dBI7EhFRmeZ2dUfy41zMPxqH6pWM0da1itiR6BV4RIyonL7o4ILO9e2x+HgCTsRzQDgRSZNcJmBtfy94VLPEuD1RiLuXIXYkegU2YkTlJJMJ+LZ3IzSobomJ+7i4EZF0mRjoYctgH1gZ6yNgRxjuZzwVOxK9BBsxojdgbCDH5kE+sDTWx/Cd4UjhgHAikqgqFkbYNtQXOfnFGLo9DFl5vPJbitiIEb2hyhZG2DrYFxlPOSCciKTN1d4CQX6NcS01G+P2RKGIV35LDhsxorfgXs0Ca/uV3LNn8n4OCCci6WpVzw6Lenjir6tpmHeUV35LDRsxorfUzr0KZnd2wy9xD7D8tytixyEieqn+TWpidGtn7DmfhE2nb4odh/6Dt68gegfDWtTGzfQcrD91A7VtTdHHp4bYkYiIyjStowvuPM7F0p8vw6GSCbo0qCp2JAIbMaJ3IggCvvzYA0kPczH7cAxqWpugqZON2LGIiF5QcuV3QzzIyMPkkIuwtzSCd61KYsfSeTw1SfSO9OUyfOfXGDWtTTA6OAKJHBBORBJlpF9y5Xc1SyOM2BWO2w+5XomNjRhRBbA0LhkQLgAYtiMMT3ILxI5ERFQma1MDbB/aBEqlEkO3h+FxDtcrMbERI6ogtWxMsWmQD5IfP8WY4EgUFPEycSKSptq2ptg8yAfJT55i1PcRyC/ibXjEwkaMqAL5Olrj60/r49zNh5gbGsvLxIlIsnwcrfFt74a4cOsRph6I5m14RMLN+kQV7JPGDriZloN1f16HmdIa7u5iJyIiKlu3htVw53EuvvnlCmpYG2NqR1exI+kclR0Ru3TpEvz9/QEAt2/fRv/+/TFgwADMnz8fCgVP2ZB2m9K+HrrUr4ptEY/wa9wDsePQW+AaRrpiTGtn9G9SA9/9eQP7LiSJHUfnqKQR27x5M+bMmYP8/HwAwNKlSzFp0iTs2bMHSqUSJ0+eVEVZIsmQyQR826ch6tkaYtK+i4i9ywHhmoRrGOkSQRDwVXdPtKpnh9mhsfjraprYkXSKShqxmjVrIjAwsPTjuLg4NGnSBADQqlUrnD17VhVliSTFSF+OeW2rwNrUAMN2huFBBgeEawquYaRr9OUyBPk1Rr0q5hi7OxLx9zLFjqQzVLJHrGPHjkhOTi79WKlUQhAEAICpqSmysrJe+xwKhQIJCQmqiPecvLw8lddRRw111dGWGuqqYyIUYXZLa3z+8z34bfwbKzpVg5F+xb7/0abXSyo0ZQ3Tpp+9ttRQVx1V1ZjZ3AqTj+fAf8tZfP2hLcDXS+XUsllfJvv///Dk5OTAwsKiXF/j5uamylgAgISEBJXXUUcNddXRlhrqqpOQkIDOXm4wsqmK4TvDsf7iU2wY6A2ZTKjQGtr0ekmRVNcwbfvZa0MNddVRVQ03AMHVa6H3hnNY8s9jHJ3YEOZG+hVe5780+fX63xpvQy23r3B3d8f58+cBAKdPn4aPj486yhJJRlvXKpjTxR2/xadg2a+XxY5Db4hrGOkSt6oW+M6vMW4/KcDYPVEoLObFKaqklkZs+vTpCAwMRN++fVFYWIiOHTuqoyyRpAxt7oiBTWti4183sT+MVyZpEq5hpGta17PD+Ka2OH01jfdEVDGVnZp0cHBASEgIAKB27doIDg5WVSkijSAIAhZ088Dth7mYfTgWNaxN8L6zrdix6CW4hpGu61TPAkVGlvjuzxuoYW2CsR/UETuSVuKd9YnUSE8uw7oBjeFoa4oxwZG4mZYtdiQiopf6vL0LPm5YDct/vYIjF++KHUcrsREjUjNLY31sG+wLuUxAwA4O3CUi6ZLJBCzv3QDv1bbG1APR+L+bD8WOpHXYiBGJoKaNCTb5e+PekzyMDo7ggHAikixDPTk2+fughrUxRu4Kx/XU19++hcqPjRiRSHwcrfFNrwY4n/gIsw7HcDMsEUmWpYk+dgxtAgM9GYZsD0NaVr7YkbQGGzEiEfXwqo4JH9bFDxHJ2PDXTbHjEBG9VA1rE2wb4ouH2QUYtjMMuQVFYkfSCmzEiEQ2uV1ddGtYDct+uYxfYu+LHYeI6KUaOFghsL8XYu9mYMLeKBQreCT/XbERIxKZIAhY3qsBvGpaYdL+i4hJ5oBwIpKudu5V8OXHHvg9IRULd133SQAAGgFJREFUjsZxW8U7YiNGJAFG+iWbYW1MDTFsZxjuZzwVOxIR0Uv5N3PEqFZO+P7/bmPz39xW8S7YiBFJhJ25IbYN8UVuQTGG7QhHTj73XxCRdE3v5IouDapiyfHL+PHSPbHjaCw2YkQS4mJvjsABXrj8IBOT9l/k/gsikiyZTMC3vRvC17ESPg+5hAuJj8SOpJHYiBFJzAculTGvqztOxKdg2S8cEE5E0vVsW4VDJWOM2BWOG5wW8sbYiBFJ0JDmtTGoWS1sOn0Tey9wQDgRSVclUwPsGNoEejIBQ7Zf4D3G3hAbMSKJmtfVHa3r2WFuaCzOXE8XOw4R0UvVtDHB1iG+SMvK5z3G3hAbMSKJKhkQ7gUnO1OMDo7A9VQe8ici6WpUwwqB/Rsj9m4Gxu+JQlExR7eVBxsxIgkzN9LH1sG+MNSTYdjOMDzigHAikrD2/95j7OTlVCz4kfcYKw82YkQSV8PaBBv9fXA/Iw+jv49AflGx2JGIiF7Kv5kjRrV2QvD/JXF0WzmwESPSAN61KmFF74a4cOsRZh2K5btMIpK06R1dS0e3Hbl4V+w4kqYndgAiKp+PG1bDzbRsrP79GpzsTDH2gzpiRyIiKpNMJmBF7wZIzczDFwcuobK5EZo524gdS5J4RIxIg0z8sC66N6qG5b9ewfEYDggnIuky1Cu5x5ijjSlGfh+OqylZYkeSJDZiRBpEEAQs+7QBGte0wpSQi4hOfiJ2JCKil7I00cf2ob4w0pdjyLYLeJCRJ3YkyWEjRqRhjPTl2DTIB7Zmhhi2MxxpObxfDxFJl0MlE2wf4ouMp4UYuiMMWXmFYkeSFDZiRBrI1qxkQPjTgmIsOPmAA8KJSNI8q1siaKA3rqZk4bPdkSjkPcZKsREj0lD1qphj3QAv3HpSgIn7ojggnIgkrXU9Oyz9pD7+vpaOGQdjePX3v9iIEWmwNi6VMbqJDX5PSMWS4wlixyEieqU+PjUwqV1dHIxMxqoTV8WOIwm8fQWRhuvmaolcuTm2/pMIJztT+L1XS+xIREQvNfHDurj/JA9r/197dx7W1Jm2AfzOQgKyiCguVcENgQqW1fWz0qkoU1cEDaIRlyljnbbfpbRVO6NDlaJO9bMdbcc6dUFKHa2fVWqnWq1tbRk3EMEFF9ytU0UENQGJMWf+8IKrnYoBcnIOhPv3X4ie+3lj8vjkkJx3XzE6eLogxF3uiuTFM2JEDmD+iKfxnL83Fuw4ie/PlchdDhFRrRQKBdJigxDl740/bT+Bw9cq5C5JVhzEiByASqnAysQw+LV1w8ysoyi+yev1EFHj5aRS4v3EMAR2cEf6dzea9aV4OIgROQg3rRofJUVAq1Zh2oZclBqq5C6JiKhWrlo11k2JhKezCtM2HMGV0uZ5ZoyDGJED6dSqBf4+ORw37t7HjI+5QTgRNW5t3Z2RNqQ9zBYBSesP47bRJHdJkuMgRuRgQn1aYfn4Z3DkUhnm8SviRNTIdWqpwdqkCFwvr8T0jCOoNDWvN5AcxIgc0IjeT2F2dE9sy/8R739TLHc5RERPFO7rhfcSQnHsajlebWbXReQgRuSgXvlND8SGdsSyr85iZ+F1ucshInqimKD2SB3ZC3tO3cCfs080m7P5vI4YkYNSKBRYEheMq7crkLKlAB09XRDq00rusoiIapU0oAuu36nEh99dQIeWLvjDcz3kLsnueEaMyIFp1Sp8qA9HWw8tXtyYh2tlzfNbSUTUdMwZFoAxIU/hnd1nsO3oNbnLsTsOYkQOrrWbFuuSIlFlfojfZeTi3v0HcpdERFQrpVKBv8Q/gwHdW+ONrYXYf9axL1LNQYyoGfBr544PJobh3E0DXt2UD/NDi9wlNUljxoyBXq+HXq/HvHnz5C6HyGFp1Eqs1oejR1s3vPRxHk78eEfukuxG0s+IjRkzBu7ujzaV6tSpExYvXixlPFGzNsjPG2+N6oU/bT+BtC+KkDqql9wlNSlVVY8ukJuZmSlzJUTNg4ezEzKm9cHYD/6FKeuP4LOZA9DZq4XcZYlOskGMTYxIfpP6+eJCiRHrci6ie1s36Ptxg/C6On36NCorKzFt2jSYzWbMnj0bISEhcpdF5NDaeTgjY1ok4v52AEnrDmPrSwPg5aqRuyxRSTaIsYkRNQ5/HB6Iy6VGpGafhK9XCzzb01vukpoEZ2dnTJ8+HePGjcOlS5fw4osvYteuXVCrH99GLRYLioqK7FrT/fv37Z4hVY6jZEiV4ygZdc2ZH+WNN7/6NxJX78fioR3grK7fJ6ukWktDKASJLtRx5swZFBQU1LmJ5eXloUUL+5+CvH//PpydnZt8hlQ5jpIhVU5jzah4YMFrX17HDcMD/N8LHeHraf0dplT/LoGBgXbPaAiTyQSLxVLzGMTHx2PlypXo0KHDY/98fn4+QkND7VpTUVGRJI+XFDmOkiFVjqNk1Cdn14mf8FJWHp4PaIvVk8KhVtV9GGvMj5dkZ8S6du0KX19fKBQKdO3aFZ6enigpKam1iSmVykb1BGjsGVLlOEqGVDmNOeNjn24YvSoHb39fiu0zB6K1m9YuOfXRWN+xAsDWrVtx9uxZpKam4saNGzAYDPD25tlEIqnEBLXHwlG9MH/HSczfcQLpscFQKBRyl2Uzyb41uXXrVixZsgQA2MSIGoGOni74KCkCN+9WITkzD/cfNK/93eorPj4e9+7dw4QJEzBr1iykp6fXekafiOxD378L/vBcd2w6fBV//doxtm+TrIvEx8dj3rx5mDBhAhQKBZsYUSMQ0tkTK3QhmJl1FHP+vxDv6kIc4h2mPWg0GixfvlzuMoiavdeG+uOnO1VYsfcs2nlokdDHR+6SbCLZJMQmRtQ4vRDcAa8P88c7u8+gWxs3/O8QP7lLIiKqVfX2bbcMVXjzs+No46bFkKfbyV1Wg/GCrkSEmVHdMTasI1bsPYvsAm4QTkSNm5NKiQ8mhiGoY0u8vOko8i6XyV1Sg3EQIyIoFAosHhuMPl288NqnBTh6pek2NSJqHly1aqybEon2Hs6YnnEExTcNcpfUIBzEiAjAow3CV+vD0aGlM5I35uLqbW4QTkSNWxs3LTKm9YFaqUDSusO4cfe+3CXVGwcxIqrh5arB2qRImMwWbhBORE2Cb2tXbJjaB+UVJiStO4y7TaxvcRAjol/o0dYNf5sUjuISA17hBuFE1AQEdWyJ1fpwnC8x4MWM3CZ1OR4OYkT0KwN7tMGi0UH49kwJ0r5ovBdZJSKqNsjPG8vGPYNDF29j9pZjeGiRZOMgm/FCXkT0WIl9fXChxICPfriIbt6uiPSUuyIioicbHdIRJfeqkPZFEdq4ncRbo3o1+msj8owYEdVq3guBGBLYFqnZJ5H7Iz+8T0SN3+8GdUPys92w8cBlvP9N47/6PgcxIqqVSqnAewmh8G/vgfTvbuDMT/fkLomIyKq5MQGIDe2IZV+dxeYjV+Qu54k4iBHRE7lq1VibFAEXtRLTNhzBLUOV3CURET2RUqnAX+J7Y3BPb8zbdhwHrxjlLqlWHMSIyKqnPF3w59+0R6mxCi9ubFrfSCKi5qn66vvBnTyxeP9N5F66LXdJj8VBjIjqpGcbLd7VhSD/Sjne2FoIQWga30gioubLVavG+imRaOuqxrQNRxrlxys4iBFRncUEdcAbMf7ILriOd/eek7scIiKrvFw1SItuDxeNCpPXHcK1ssb1xSMOYkRULy8N7o5x4Z3w3tfnsOPYj3KXQ0RkVTs3J2RM64MK00NMXncYt40muUuqwUGMiOpFoVDg7dhg9O3qhdc/LUTe5cb5uQsiop8LaO+BdVMi8WNZJaauPwxjlVnukgBwECOiBtColVg9KRxPeTojeWMeNwgnoiYhsosXViWG4cT1u5jxcR5MZvm3cOMgRkQN0spVg7VTIvHgoQXTNhxpchvtElHzFP10OyweG4zvz93C7C3HYJF5KyQOYkTUYN293bBaH46Lt4z4Q9ZRbhBORE3C+IjOmPvbAOws/Dfe+vykrN8C5yBGRDYZ0L0N0sYE4ftzt/DW56d4WQsiahJmDO6O5Ge7IePAZfz1a/m2QuKm30Rks4Q+Prhwy4g1+y+gm7crpg7sKndJRERWzfttAEoNJqzYexZebhro+/lKXgMHMSISxZyYAFy8ZcSinafQpbUrngtoK3dJRERPpFAosDQuGHcqTViw4wQ8XZww8pmnJK2Bv5okIlE82iA8BIEdPPDKpnyc/umu3CUREVmlVimxKjEMkb5emL3lGL47WyJpPgcxIhJNC40aa5Mi4apVYfqGXNy8d1/ukoiIrHJ2UuHvSRHo0dYdMzLzcPRKmWTZHMSISFTtWzrjo8mRuG00IXljHjcIJ6ImoaWLEzKmRaKthxZT10u3LyUHMSISXXCnllihC0HBtXKkfFog+3V6iIjqoq27Mz6e3hfOTkro1x6S5GLVHMSIyC5igtpjTkwAvij8N97de1bucoiI6qSzVwtkTu8L00MLJn50CDfv2vcjFhzEiMhufv9sN+giOuOv+4rxWf41ucshIqqTnu3csWFqH9wyVEG/9jDKK+y3STgHMSKyG4VCgUVjgtCvmxfmbD2OI5e4QTgRNQ0hnT3x98kRuHjLiCnrj8Bgp03COYgRkV1VbxDesZULfp+Zhyul3CCciJqGgT3aYGViKI7/eAfJG3Pt8uUjDmJEZHeeLTRYNyUSDy0CpmUcwZ1KbhBORE3DsF7t8U58b/zrfCle/iQfD0TeU5eDGBFJomsbV6yeFI7LpUa8/MlR0ZsZEZG9jA3rhEWje2Fv0Q2kbCnAQxG/Cc5BjIgk0797a7wdG4zvz91CavZJbhBORE2Gvn8XzIkJQHbBdfzxs+Oi9S/uNUlEkhof0RkXSoxY/d15dPN2w/T/4QbhRNQ0vBTVHcYqM1Z9UwxnJxX+PPJpKBQKm47JQYyIJPfGMH9cvGVA2hen0KV1Czwf2E7ukoiI6iRlaE9UPniItT9chLOTCnNi/G0axvirSSKSnFKpwApdCHo99WiDcHtfMJGISCwKhQJ/Gh6ISf18sPq789h85KpNx5PsjJjFYkFqairOnDkDjUaDtLQ0+Pr6ShVPRI1M9QbhK/edg0pp26l9KbCHEVE1hUKBhaOC0N7DGW3ctDYdS7IzYnv37oXJZMLmzZuRkpKCJUuWSBVNRI1UOw9npI0JRmsbG5kU2MOI6OeUSgVe/o0fhjxt20crJDsjlpeXh0GDBgEAQkJCcOLECamiiYhsVt8eZrFYUFRUZNea7t+/b/cMqXIcJUOqHEfJkCpHqrU0hGSDmMFggJubW81tlUoFs9kMtfrxJUjRxADHegI4ylr4eDW+DClzGqv69jClUonAwEC71lRUVGT3DKlyHCVDqhxHyZAqR6qMhpBsEHNzc4PRaKy5bbFYam1ggDRNDHCcJ4BUOY6SIVWOo2RIldOYB7369jAiorqQ7DNiYWFh2L9/PwDg2LFj6Nmzp1TRREQ2Yw8jInuQ7O1cdHQ0cnJykJCQAEEQkJ6eLlU0EZHN2MOIyB4kG8SUSiUWLlwoVRwRkajYw4jIHnhBVyIiIiKZcBAjIiIikgkHMSIiIiKZcBAjIiIikgkHMSIiIiKZcBAjIiIikgkHMSIiIiKZKARBEOQu4nGOHTsGrVYrdxlEJKGqqiqEhITIXYYo2MOImpeG9q9GO4gREREROTr+apKIiIhIJhzEiIiIiGTCQYyIiIhIJhzEiIiIiGTCQYyIiIhIJrIPYhaLBQsWLIBOp4Ner8fly5d/cf++ffsQFxcHnU6HLVu22CUDACorK5GQkIDz5883KKMuOTt37sS4ceOQkJCABQsWwGKxiJ6xe/duxMXFIT4+Hp9++qld1lFt/vz5WLZsWYMy6pKzfv16DB8+HHq9Hnq9HhcuXBA9o7CwEImJiZgwYQJeffVVVFVViZpRUlJSU79er0dERAQ2bdpU74y6rCU7OxuxsbGIi4vDJ598YpeM7du3Y+TIkUhMTGzw86taQUEB9Hr9r34uxmteKlL0r7rkALb3MEfpX3XJqWZLD3OU/mUtR6we5mj9CxCxhwky2717tzBnzhxBEAQhPz9fmDFjRs19JpNJGDJkiFBeXi5UVVUJY8eOFW7evClqhiAIQmFhoRAbGysMGDBAKC4utstaKisrheeff16oqKgQBEEQZs2aJezdu1fUDLPZLERHRwt3794VzGazMHToUKG0tFTUjGqbNm0Sxo8fL7zzzjv1Pn5dc1JSUoTjx483+PjWMiwWizBq1Cjh0qVLgiAIwpYtW4Tz58+LmvFzR48eFfR6vWA2m+udUZecgQMHCmVlZUJVVVXN60bMjNLSUiEqKkooKysTHj58KOj1euHq1asNWsuaNWuEESNGCOPGjfvFz8V6zUtFiv5lLUcQxOlhjtK/rOVUs7WHOUr/spbzc7b0MEfqX4Igbg+T/YxYXl4eBg0aBAAICQnBiRMnau47f/48fHx80LJlS2g0GoSHhyM3N1fUDAAwmUx4//330a1bNxtW8uQcjUaDf/zjH3BxcQEAmM3mBl3s8UkZKpUK//znP+Hu7o7y8nIAgKurq6gZAJCfn4+CggLodLp6H7s+OSdPnsSaNWswYcIEfPjhh6JnXLx4EZ6ensjIyMCkSZNQXl7eoOeAtXUAgCAIWLRoEVJTU6FSqURfCwD4+/vj3r17MJlMEAQBCoVC1Ixr164hICAAnp6eUCqVCA4ORkFBQYPW4uPjg5UrV/7q52K95qUiRf+ylgOI08McpX9ZywHE6WGO0r/qshbA9h7mSP0LELeHyT6IGQwGuLm51dxWqVQwm80197m7u9fc5+rqCoPBIGoGAISHh6NDhw4NKb/OOUqlEm3atAEAZGZmoqKiAgMHDhQ1AwDUajW++uorjB49GhEREVCr1aJm3Lx5E6tWrcKCBQvqfdz65ADA8OHDkZqaioyMDOTl5eGbb74RNaOsrAz5+flITEzE+vXrcfDgQRw4cED0dQCPTlX7+fnZ9B+ltRw/Pz/ExcVh+PDhiIqKgoeHh6gZvr6+KC4uxq1bt1BZWYkDBw6goqKiQWsZNmzYY5+bYr3mpSJF/7KWA4jTwxylf1nLEauHOUr/qstaANt7mCP1L0DcHib7IObm5gaj0Vhz22Kx1Czuv+8zGo2/WKAYGWKylmOxWLB06VLk5ORg5cqVDZr467KWoUOHYv/+/Xjw4AG2b98uasauXbtQVlaG5ORkrFmzBjt37sS2bdvqnWEtRxAEJCUlwcvLCxqNBoMHD8apU6dEzfD09ISvry969OgBJycnDBo06LHvBG3JqJadnY3x48fX+9h1zTl9+jS+/fZbfP3119i3bx9u376NL7/8UtSMli1bYt68eXjllVfw5ptvolevXmjVqpVNa7KW39DXvFSk6F/WcsTiKP3LWo5YPcxR+pe1nGq29rDm0L8eV0NdXveyD2JhYWHYv38/gEd7s/Xs2bPmvu7du+Py5csoLy+HyWRCbm4uQkNDRc0Qk7WcBQsWoKqqCh988EHNKX4xMwwGAyZNmgSTyQSlUgkXFxcolfX/J35SxuTJk7Ft2zZkZmYiOTkZI0aMwNixY+2ylhEjRsBoNEIQBBw6dAhBQUGiZnTu3BlGo7HmA525ubnw8/MTNaPayZMnERYWVu9j1zXH3d0dzs7O0Gq1UKlU8PLywt27d0XNMJvNKCgoQFZWFpYuXYoLFy7YvKb/JtZrXipS9C9rOWJxlP5lLUesHuYo/ctaTjVbe1hz6F9Aw1734p8Wqqfo6Gjk5OQgISEBgiAgPT0dn3/+OSoqKqDT6TB37lxMnz4dgiAgLi4O7dq1Ez1DirUEBQVh69atiIiIQFJSEoBHDSE6OlrUtYwcORITJ06EWq2Gv78/Ro0aJeo6pHq8dDodZs2ahcmTJ0Oj0aB///4YPHiw6Blvv/02UlJSIAgCQkNDERUVJXrG7du34erq2qAzCPXJ0el0SExMhJOTE3x8fBAbGyt6hpOTE8aOHQutVoupU6fCy8vLpjVVE/s1LxUp+lddcuy9lqbUv+qSIwZH6V91yRGjhzly/wJs62Hc9JuIiIhIJrL/apKIiIioueIgRkRERCQTDmJEREREMuEgRkRERCQTDmJEREREMuEgRnZz6NAh9O/fv2az2PHjxyMzMxMAsGPHDuzZs6dBx92zZw9SUlJqbr/33nsoLi4WpWYiIoD9i6Qj+3XEyLH169cPK1asAPBoP7yYmBgMHToU2dnZWLt2bb2Pl5aWhh9++AGBgYE1P5s6dSpee+01rFmzRrS6iYjYv0gKHMRIMgaDAUqlErt3767Zpy4rKwtHjx7F8uXLMWfOHPTu3RutW7dGVlbWL/7u66+/jt69eyMsLAxDhgzB5s2ba+7z8PCAVqvF6dOnERAQIOmaiKh5YP8ie+EgRnZ18OBB6PV6KBQKODk5Yf78+cjOzq7ZUmTixInIycnB3Llz8eDBA0ycOBEAEBMT89jjvfDCCzh06NCvfu7v74/Dhw+zkRGRaNi/SAocxMiufn5qv1pGRgZat25dczs5ORk6na5m491du3bV+o6yNt7e3rhx44aIlRNRc8f+RVLgIEaS8/Lywr179wA8+txFeno6Fi5ciNTUVGRlZSEmJqbWd5S1uXPnzi+aIxGRPbB/kdj4rUmSXN++fVFQUAAAWLZsGaKioqDT6fDss89i+fLlDTpmYWEh+vXrJ2aZRES/wv5FYuOm3yQ5o9GImTNnIiMjQ5TjlZeXY+7cuVi9erUoxyMiqg37F4mNZ8RIcq6urhgzZgx2794tyvE2bNiAWbNmiXIsIqInYf8isfGMGBEREZFMeEaMiIiISCYcxIiIiIhkwkGMiIiISCYcxIiIiIhkwkGMiIiISCYcxIiIiIhk8h+72ZeKdYEpvgAAAABJRU5ErkJggg==%0A">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We observe that in the classification problem there is a one-to-one correspondence between the Cross Entropy and the KL Divergence. Furthermore, we observe that as $P(X=1)$ approaches $1$ that the loss function (either one of the two quantities) reduces linearly to zero. This signifies that the prediction distribution is getting closer and closer to the distribution of the ground truth (the selection of state $b$).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Additional-Resources">
+<a class="anchor" href="#Additional-Resources" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additional Resources<a class="anchor-link" href="#Additional-Resources"> </a>
+</h2>
+<p>For more information on cross entropy I suggest you take a look at Aurélien Géron's excellent introduction to the topic.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>
+</p>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/watch?v=ErfnhcEV1O8" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For a more in-depth coverage, I then suggest reading <em>Elements of Information Theory</em> by Thomas and Cover (2006), Chapter 5 of <em>Deep Learning</em> by Goodfellow, Bengio and Courville (2016), and <em>Machine Learning: A Probabilistic Perspective</em> by Kevin P. Murphy (2012).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<div class="footnotes"><p id="fn-1">1. The term "representation units" is being used, because, depending on the logarithmic basis, the fundamental unit of information may vary.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
+<p></p>
+<div class="footnotes"><p id="fn-2">2. This, by the way, is the source of heat in electronic devices.<a href="#fnref-2" class="footnote footnotes">↩</a></p></div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="pbranco1987/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/tutorial/information%20theory/cost%20function/maximum%20likelihood%20estimation/entropy/cross%20entropy/log-loss%20function/kullback-leibler%20divergence/2020/11/03/blog.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>A Colloquium on Logic and Cybernetics</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
