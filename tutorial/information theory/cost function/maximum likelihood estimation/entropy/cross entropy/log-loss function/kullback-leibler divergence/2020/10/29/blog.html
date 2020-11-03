@@ -100,7 +100,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      12 min read
+      14 min read
     
 </span></p>
 
@@ -592,7 +592,16 @@ $$<p>This gives us another insight into the KL divergence. Given that $-\sum_{x 
 <p>We are now going to give a name to the quantity $-\sum_{x \in \mathcal{X}} p(x) \log q(x)$. As we hinted in the last section, this is the cross entropy $H_{p,q}$. Formally,</p>
 $$
 H_{p,q} = -\sum_{x \in \mathcal{X}} p(x) \log q(x)
-$$<p>This quantity is closely related to the KL divergence, the difference being that it is the absolute number of bits necessary for the modeling distribution $q$, as opposed to the excess representation units in comparison to the entropy.</p>
+$$<p>This quantity is closely related to the KL divergence, the difference being that it is the absolute number of bits necessary for the modeling distribution $q$, as opposed to the excess number of representation units <sup id="fnref-1" class="footnote-ref"><a href="#fn-1">1</a></sup>.
+</p>
+<div class="footnotes"><p id="fn-1">1. The term "representation units" is being used, because, depending on the logarithmic unit, the fundamental unit of information may vary.<a href="#fnref-1" class="footnote footnotes">↩</a></p></div>
+<p>Rearranging the definition of the KL Divergence, we can understand the cross entropy as the sum of the entropy of a random variable $X$ with the divergence caused by modeling it by a probability distribution $q$ other than the true one $p$:</p>
+$$
+    H_{p,q} = H(X) + D(p||q)
+$$<p>For empirical data, $p$ will rarely be known, because the random variables we will be working with depend on a large scale of phenomena, most of which are not taken into account on purpose in order to simplify the problem and to make it tractable for mathematical analysis. For instance, the white Gaussian noise in communication systems is not white. It is an approximation that highlights only the dominant random phenomenon in the system, which is the movement of electrons within electronic wiring <sup id="fnref-2" class="footnote-ref"><a href="#fn-2">2</a></sup>. But it fails to take into account many other physical phenomena that are not quite Gaussian.
+</p>
+<div class="footnotes"><p id="fn-2">2. This, by the way, is the source of heat in electronic devices.<a href="#fnref-2" class="footnote footnotes">↩</a></p></div>
+<p>It is thus important to realise that most often we will be working with $q$ in any system we are working with.</p>
 
 </div>
 </div>
