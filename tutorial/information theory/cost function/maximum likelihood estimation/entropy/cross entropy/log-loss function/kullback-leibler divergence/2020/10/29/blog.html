@@ -401,13 +401,11 @@ $$<p>Now, let us vary $\theta \in [0,1]$ within its domain in order to observe t
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>One quantity very closely related to the entropy is the Kullback-Leibler (KL) Divergence, also known as the relative entropy. Let $X$ be a random variable and let $p_X$ and $q_X$ (for which we will use for convenience the shorthand $p$ and $q$, respectively) be two distributions that describe the probability density function of $X$. The distribution $p$ is the true distribution, the one that generates the observed, experimental data. Distribution $q$, on the other hand, is a modeled distribution. It is the attempt to estimate $p$. According to [Cover-Thomas, 2006], the KL Divergence is defined as</p>
 $$
-    \label{eq:KLdiv}
      D(p||q) \triangleq \sum\limits_{x \in \mathcal{X}} p(x) \log \left( \frac{p(x)}{q(x)} \right) \tag{2}
 $$<p>where the $D(p||q)$ is usually computed with the $\log$ function under base $e$, i.e., the convention is to operate the divergence functional in terms of nats.</p>
 <p>The KL divergence measures how similar $q$ is to $p$. Concretely, it tells how many extra bits the distribution $q$ adds to the entropy of $X$. In order to observe this, let us go back to eq. $\eqref{eq:KLdiv}$</p>
 $$
 \begin{aligned}
-\label{eq:KLdiv_cross_entropy}
  D(p||q) &amp;= \sum\limits_{x \in \mathcal{X}} p(x) \log p(x) - p(x) \log (q(x)) \\ 
          &amp;= -\sum\limits_{x \in \mathcal{X}} p(x) \log q(x) - H(X) \tag{3}
 \end{aligned}
