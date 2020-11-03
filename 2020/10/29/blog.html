@@ -99,7 +99,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      9 min read
+      12 min read
     
 </span></p>
 
@@ -146,7 +146,7 @@ window.onload = wrap_img;
 - badges: true
 - comments: true
 - categories: [Tutorial, Information Theory, Cost Function, Maximum Likelihood Estimation, Entropy, Cross Entropy, Log-loss Function, Kullback-Leibler Divergence]
-- image: images/some_folder/your_image.png
+- image: images/cross_entropy_graphs.png
 - hide: false
 - search_exclude: true
 - metadata_key1: metadata_value1
@@ -164,17 +164,26 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Entropy-as-a-Measure-of-Uncertainty">Entropy as a Measure of Uncertainty<a class="anchor-link" href="#Entropy-as-a-Measure-of-Uncertainty"> </a></h2><p>In order to understand cross entropy, we must first lay out the foundations of entropy. This quantity is a description of the uncertainty of a random variable. We want to measure how uncertain a probabilistic event is. Essentially, the more unlikely an event is, the more surprising it is and, consequently, the more information it holds. To say that it is raining now contains no information. It is a certain event that bears no surprise. However, to say that there is a $35$% probability that it will rain tomorrow does contain information. If we were faced instead with a probability of $50$% that it will rain, would we be more or less certain of tomorrow's weather? It seems reasonable to say that we would be less certain, because the $35$% probability of rain implies a probability of $65$% of no rain, whilst $50$% either way essentially leaves us with the most amount of doubt possible. This is an essential aspect of entropy: it is maximized for equally-likely events. Another illustrative example is a biased die and a fair die. Let us imagine that the biased die is heavily biased towards the six-dotted side such that for this die's events $\{1,2,3,4,5,6\}$, the corresponding set of probabilities is given by</p>
-$$ \left\lbrace \frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12}, \frac{7}{12} \right\rbrace $$<p>.</p>
+$$
+\begin{equation}
+\left\lbrace \frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12},\frac{1}{12}, \frac{7}{12} \right\rbrace
+\end{equation} 
+$$<p>.</p>
 <p>The fair die, on the other hand, follows the traditional distribution</p>
-$$ \left\lbrace \frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6} \right\rbrace $$<p>.</p>
+$$
+\begin{equation}
+\left\lbrace \frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6} \right\rbrace 
+\end{equation}
+$$<p>.</p>
 <p>If you were to gamble, which die would you pick? Which one makes you less uncertain of your choice, or, better still, which one decreases the entropy you experience? Evidently, it is <strong>not</strong> the fair die, for, once again, uniform distributions maximize entropy.</p>
 <p>As we can see, there is a relationship between the probability of a random variable's events and its entropy. Let $X$ be a random variable, $\mathcal{X}$ its support group, and $H(X)$ its entropy. According to [Cover-Thomas,2006], entropy is defined as</p>
 $$
 \begin{equation}
     \label{eq:entropy}
-    H(X) = \sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( \frac{1}{p_X (x)} \right) = -\sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( p_X (x) \right) \tag{1}
+    H(X) \triangleq \sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( \frac{1}{p_X (x)} \right) = -\sum\limits_{x \in \mathcal{X}} p_X (x) \log_2\left( p_X (x) \right) \tag{1}
 \end{equation}
 $$<p>where the $\log$ operational is defined under base $2$. This gives us the basic unit of information: the bit. Entropy can also be computed with different base values, including $e$, in which case the unit of measurement becomes the "nat". It is useful to distinguish now between the information theoretical bit and the bit in computer science. In computer science, the bit is the basic unit of storage. It is the placeholder for data, even redundant, uninformative data. In Information Theory, the bit is the basic unit of actual information, stripped of all redundancy.</p>
+<p>Equation $\eqref{eq:entropy}$ has one important property: $H(x) \geq 0$, because probability values are also greater than or equal to zero. This makes sense, as the natural interpretation of information does not lead to the definition of negative information.</p>
 <p>Let $X$ be a random variable with categories $\left\lbrace a,b,c,d \right\rbrace$. If the associated probabilities are $\{ 0.2,0.1,0.3,0.4 \}$, eq. $\eqref{eq:entropy}$ tells us that</p>
 $$
 \begin{align}
@@ -348,13 +357,161 @@ $$<p>Now, let us vary $\theta \in [0,1]$ within its domain in order to observe t
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>As we can see from the graph, the binary entropy $H(p)$ is zero at both $P(X=1) = 0 $ and $P(X=1) = 1$, because at those two points, the variable is not random; it is certain that it is $0$ and $1$, respectively. On the other hand, at $P(X=1) = 0.5 $, entropy is maximized, since both events are equally likely: $P(X=0) = 0.5$ and $P(X=1) = 0.5$. Consequently, we have the most uncertainty (one bit) at this point.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Kullback-Leibler-Divergence:-The-Distance-Between-Probability-Density-Functions">Kullback-Leibler Divergence: The Distance Between Probability Density Functions<a class="anchor-link" href="#Kullback-Leibler-Divergence:-The-Distance-Between-Probability-Density-Functions"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>One quantity very closely related to the entropy is the Kullback-Leibler (KL) Divergence, also known as the relative entropy. Let $X$ be a random variable and let $p_X$ and $q_X$ (for which we will use for convenience the shorthand $p$ and $q$, respectively) be two distributions that describe the probability density function of $X$. The distribution $p$ is the true distribution, the one that generates the observed, experimental data. Distribution $q$, on the other hand, is a modeled distribution. It is the attempt to estimate $p$. According to [Cover-Thomas, 2006], the KL Divergence is defined as</p>
+$$
+\begin{equation}
+\label{eq:KLdiv}
+ D(p||q) \triangleq \sum\limits_{x \in \mathcal{X}} p(x) \log \left( \frac{p(x)}{q(x)} \right) \tag{2}
+\end{equation}
+$$<p>where the $D(p||q)$ is usually computed with the $\log$ function under base $e$, i.e., the convention is to operate the divergence functional in terms of nats.</p>
+<p>The KL divergence measures how similar $q$ is to $p$. Concretely, it tells how many extra bits the distribution $q$ adds to the entropy of $X$. In order to observe this, let us go back to eq. $\eqref{eq:KLdiv}$</p>
+$$
+\begin{align}
+\label{eq:KLdiv_cross_entropy}
+ D(p||q) &amp;= \sum\limits_{x \in \mathcal{X}} p(x) \log p(x) - p(x) \log (q(x)) \\ 
+         &amp;= -\sum\limits_{x \in \mathcal{X}} p(x) \log q(x) - H(X) \tag{3}
+\end{align}
+$$<p>The sum term on the right is the cross entropy. For the time being, let us simply see it as a form of entropy computed as an expected value with regard to another probability distribution. Let us illustrate this with a numerical example. Let $X$ be a random variable and let its states be $\{a,b,c,d\}$ with probability distribution</p>
+$$
+\begin{equation}
+p = \left\lbrace \frac{1}{4}, \frac{1}{8}, \frac{1}{16}, \frac{9}{16} \right\rbrace
+\end{equation}
+$$<p>Its entropy is calculated as</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">entropy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="o">/</span><span class="mi">16</span><span class="p">]),</span> <span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># here the entropy was multiplied by log_e(2) to convert it to nats</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1.1034329096381947</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us now calculate the expected value with regard to a different probability distribution</p>
+$$
+\begin{equation}
+q = \left\lbrace \frac{1}{4}, \frac{1}{4}, \frac{1}{4}, \frac{1}{4} \right\rbrace
+\end{equation}
+$$<p>This results in</p>
+$$
+\begin{align}
+    -\sum\limits_{x \in \mathcal{X}} p(x) \log q(x) &amp;= -\frac{1}{4} \log \frac{1}{4} - \frac{1}{8} \log \frac{1}{4} - \frac{1}{16} \log \frac{1}{4} - \frac{9}{16} \log \frac{1}{4} \\
+    &amp;= -\log \frac{1}{4} \left( \frac{1}{4} + \frac{1}{8} + \frac{1}{16} + \frac{9}{16} \right) \\
+    &amp;= -\log \frac{1}{4}
+\end{align}
+$$
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">H_pq</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">H_pq</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1.3862943611198906
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>It is clear to see that the entropy represents the random variable with less information. This is in fact another property of the entropy. It stands for the fewest number of information units necessary to describe a random variable.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If $q$ were $p$, i.e., $D(p||p)$ would then reduce to</p>
+$$
+\begin{align}
+ D(p||p) &amp;=  -\sum\limits_{x \in \mathcal{X}} p(x) \log p(x) - H(X) \\
+         &amp;= H(X) - H(X) = 0
+\end{align}
+$$<p>This gives us another insight into the KL divergence. Given that $-\sum_{x \in \mathcal{X}} p(x) \log q(x) \geq H(X) $ and $H(X) \geq 0$, then $D(p||p) \geq 0$ and it is equal to 0 iff $-\sum_{x \in \mathcal{X}} p(x) \log p(x) = H(X)$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Cross-Entropy-and-its-Relationship-to-KL-Divergence">Cross Entropy and its Relationship to KL Divergence<a class="anchor-link" href="#Cross-Entropy-and-its-Relationship-to-KL-Divergence"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We are now going to give a name to the quantity $-\sum_{x \in \mathcal{X}} p(x) \log q(x)$. As we hinted in the last section, this is the cross entropy $H_{p,q}$. Therefore,</p>
+$$
+\begin{equation}
+H_{p,q} = -\sum_{x \in \mathcal{X}} p(x) \log q(x)
+\end{equation}
+$$<p>This quantity is extremely closely associated to the KL divergence</p>
+
 </div>
 </div>
 </div>
