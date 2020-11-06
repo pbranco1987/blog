@@ -173,6 +173,26 @@ h6:hover .anchor-link {
   font-size: 13px !important;
 }
 
+.post-filter-message {
+  position: relative;
+}
+
+.home-link-container {
+  background: #FFFFFF; /* The background color of your choice */
+  position: absolute;
+  right: 0;
+  height: 100%;
+  top: 0;
+  padding: 0 10px;
+}
+
+.home-link {
+  display: block;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 // Search Page Styles
 .js-search-results {padding-top: 0.2rem;}
 .search-results-list-item {padding-bottom: 1rem;}
