@@ -4,20 +4,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Recurrent Neural Networks are Turing-Complete | Doctrina Machina</title>
+<title>The Blahut-Arimoto Algorithms and their Use in the Information Bottleneck Problem | Doctrina Machina</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Recurrent Neural Networks are Turing-Complete" />
+<meta property="og:title" content="The Blahut-Arimoto Algorithms and their Use in the Information Bottleneck Problem" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="In this article, I will review recurrent neural networks. I will also review the concept of Turing machines, and I will then move on to show one of the most fascinating properties of recurrent neural networks: they may be Turing-Complete." />
-<meta property="og:description" content="In this article, I will review recurrent neural networks. I will also review the concept of Turing machines, and I will then move on to show one of the most fascinating properties of recurrent neural networks: they may be Turing-Complete." />
-<link rel="canonical" href="https://www.prbranco.com/tutorial/turing%20machines/recurrent%20neural%20networks/2020/11/21/turingcompletenessRNN.html" />
-<meta property="og:url" content="https://www.prbranco.com/tutorial/turing%20machines/recurrent%20neural%20networks/2020/11/21/turingcompletenessRNN.html" />
+<meta name="description" content="This article discusses the Blahut-Arimoto algorithms. We will begin with a geometric and functional interpretation of the algorithm. We will then discuss the capacity maximization and the Rate-Distortion minimization algorithms. We will dedicate more time to the latter, as we will see that it can be used to compute the Information Bottleneck problema." />
+<meta property="og:description" content="This article discusses the Blahut-Arimoto algorithms. We will begin with a geometric and functional interpretation of the algorithm. We will then discuss the capacity maximization and the Rate-Distortion minimization algorithms. We will dedicate more time to the latter, as we will see that it can be used to compute the Information Bottleneck problema." />
+<link rel="canonical" href="https://www.prbranco.com/tutorial/blahut-arimoto/rate%20distortion%20theory/channel%20capacity/optimization/2020/11/15/blahut_arimoto.html" />
+<meta property="og:url" content="https://www.prbranco.com/tutorial/blahut-arimoto/rate%20distortion%20theory/channel%20capacity/optimization/2020/11/15/blahut_arimoto.html" />
 <meta property="og:site_name" content="Doctrina Machina" />
 <meta property="og:image" content="https://www.prbranco.com/images/camacho.png" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-11-21T00:00:00-06:00" />
+<meta property="article:published_time" content="2020-11-15T00:00:00-06:00" />
 <script type="application/ld+json">
-{"url":"https://www.prbranco.com/tutorial/turing%20machines/recurrent%20neural%20networks/2020/11/21/turingcompletenessRNN.html","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.prbranco.com/tutorial/turing%20machines/recurrent%20neural%20networks/2020/11/21/turingcompletenessRNN.html"},"image":"https://www.prbranco.com/images/camacho.png","headline":"Recurrent Neural Networks are Turing-Complete","dateModified":"2020-11-21T00:00:00-06:00","datePublished":"2020-11-21T00:00:00-06:00","description":"In this article, I will review recurrent neural networks. I will also review the concept of Turing machines, and I will then move on to show one of the most fascinating properties of recurrent neural networks: they may be Turing-Complete.","@context":"https://schema.org"}</script>
+{"url":"https://www.prbranco.com/tutorial/blahut-arimoto/rate%20distortion%20theory/channel%20capacity/optimization/2020/11/15/blahut_arimoto.html","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.prbranco.com/tutorial/blahut-arimoto/rate%20distortion%20theory/channel%20capacity/optimization/2020/11/15/blahut_arimoto.html"},"image":"https://www.prbranco.com/images/camacho.png","headline":"The Blahut-Arimoto Algorithms and their Use in the Information Bottleneck Problem","dateModified":"2020-11-15T00:00:00-06:00","datePublished":"2020-11-15T00:00:00-06:00","description":"This article discusses the Blahut-Arimoto algorithms. We will begin with a geometric and functional interpretation of the algorithm. We will then discuss the capacity maximization and the Rate-Distortion minimization algorithms. We will dedicate more time to the latter, as we will see that it can be used to compute the Information Bottleneck problema.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://www.prbranco.com/feed.xml" title="Doctrina Machina" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -94,8 +94,8 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Recurrent Neural Networks are Turing-Complete</h1><p class="page-description">In this article, I will review recurrent neural networks. I will also review the concept of Turing machines, and I will then move on to show one of the most fascinating properties of recurrent neural networks: they may be Turing-Complete.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-21T00:00:00-06:00" itemprop="datePublished">
-        Nov 21, 2020
+    <h1 class="post-title p-name" itemprop="name headline">The Blahut-Arimoto Algorithms and their Use in the Information Bottleneck Problem</h1><p class="page-description">This article discusses the Blahut-Arimoto algorithms. We will begin with a geometric and functional interpretation of the algorithm. We will then discuss the capacity maximization and the Rate-Distortion minimization algorithms. We will dedicate more time to the latter, as we will see that it can be used to compute the Information Bottleneck problema.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-15T00:00:00-06:00" itemprop="datePublished">
+        Nov 15, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
     
@@ -110,10 +110,16 @@ window.onload = wrap_img;
         <a class="category-tags-link" href="/categories/#Tutorial">Tutorial</a>
         &nbsp;
       
-        <a class="category-tags-link" href="/categories/#Turing Machines">Turing Machines</a>
+        <a class="category-tags-link" href="/categories/#Blahut-Arimoto">Blahut-Arimoto</a>
         &nbsp;
       
-        <a class="category-tags-link" href="/categories/#Recurrent Neural Networks">Recurrent Neural Networks</a>
+        <a class="category-tags-link" href="/categories/#Rate Distortion Theory">Rate Distortion Theory</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Channel Capacity">Channel Capacity</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Optimization">Optimization</a>
         
       
       </p>
@@ -124,19 +130,19 @@ window.onload = wrap_img;
         <div class="pb-5 d-flex flex-wrap flex-justify-end">
           <div class="px-2">
 
-    <a href="https://github.com/pbranco1987/blog/tree/master/_notebooks/2020-11-21-turingcompletenessRNN.ipynb" role="button" target="_blank">
+    <a href="https://github.com/pbranco1987/blog/tree/master/_notebooks/2020-11-15-blahut_arimoto.ipynb" role="button" target="_blank">
 <img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://mybinder.org/v2/gh/pbranco1987/blog/master?filepath=_notebooks%2F2020-11-21-turingcompletenessRNN.ipynb" target="_blank">
+    <a href="https://mybinder.org/v2/gh/pbranco1987/blog/master?filepath=_notebooks%2F2020-11-15-blahut_arimoto.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://colab.research.google.com/github/pbranco1987/blog/blob/master/_notebooks/2020-11-21-turingcompletenessRNN.ipynb" target="_blank">
+    <a href="https://colab.research.google.com/github/pbranco1987/blog/blob/master/_notebooks/2020-11-15-blahut_arimoto.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
     </a>
 </div>
@@ -146,16 +152,16 @@ window.onload = wrap_img;
   <div class="post-content e-content" itemprop="articleBody">
     <ul class="section-nav">
 <li class="toc-entry toc-h2"><a href="#Introduction">Introduction </a></li>
-<li class="toc-entry toc-h2"><a href="#Recurrent-Neural-Networks">Recurrent Neural Networks </a></li>
-<li class="toc-entry toc-h2"><a href="#Turing-Machines">Turing Machines </a></li>
-<li class="toc-entry toc-h2"><a href="#Turing-Completeness">Turing-Completeness </a></li>
-<li class="toc-entry toc-h2"><a href="#Recurrent-Neural-Networks-can-be-Turing-Complete">Recurrent Neural Networks can be Turing-Complete </a></li>
+<li class="toc-entry toc-h2"><a href="#Mutual-Information">Mutual Information </a></li>
+<li class="toc-entry toc-h2"><a href="#Channel-Capacity-Maximization">Channel Capacity Maximization </a></li>
+<li class="toc-entry toc-h2"><a href="#Rate-Distortion-Minimization">Rate Distortion Minimization </a></li>
+<li class="toc-entry toc-h2"><a href="#Computing-the-Information-Bottleneck">Computing the Information Bottleneck </a></li>
 <li class="toc-entry toc-h2"><a href="#References">References </a></li>
 </ul><!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
-# file to edit: _notebooks/2020-11-21-turingcompletenessRNN.ipynb
+# file to edit: _notebooks/2020-11-15-blahut_arimoto.ipynb
 -->
 
 <div class="container" id="notebook-container">
@@ -172,8 +178,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Recurrent-Neural-Networks">
-<a class="anchor" href="#Recurrent-Neural-Networks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recurrent Neural Networks<a class="anchor-link" href="#Recurrent-Neural-Networks"> </a>
+<h2 id="Mutual-Information">
+<a class="anchor" href="#Mutual-Information" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mutual Information<a class="anchor-link" href="#Mutual-Information"> </a>
 </h2>
 </div>
 </div>
@@ -181,8 +187,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Turing-Machines">
-<a class="anchor" href="#Turing-Machines" aria-hidden="true"><span class="octicon octicon-link"></span></a>Turing Machines<a class="anchor-link" href="#Turing-Machines"> </a>
+<h2 id="Channel-Capacity-Maximization">
+<a class="anchor" href="#Channel-Capacity-Maximization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Channel Capacity Maximization<a class="anchor-link" href="#Channel-Capacity-Maximization"> </a>
 </h2>
 </div>
 </div>
@@ -190,8 +196,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Turing-Completeness">
-<a class="anchor" href="#Turing-Completeness" aria-hidden="true"><span class="octicon octicon-link"></span></a>Turing-Completeness<a class="anchor-link" href="#Turing-Completeness"> </a>
+<h2 id="Rate-Distortion-Minimization">
+<a class="anchor" href="#Rate-Distortion-Minimization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rate Distortion Minimization<a class="anchor-link" href="#Rate-Distortion-Minimization"> </a>
 </h2>
 </div>
 </div>
@@ -199,8 +205,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Recurrent-Neural-Networks-can-be-Turing-Complete">
-<a class="anchor" href="#Recurrent-Neural-Networks-can-be-Turing-Complete" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recurrent Neural Networks can be Turing-Complete<a class="anchor-link" href="#Recurrent-Neural-Networks-can-be-Turing-Complete"> </a>
+<h2 id="Computing-the-Information-Bottleneck">
+<a class="anchor" href="#Computing-the-Information-Bottleneck" aria-hidden="true"><span class="octicon octicon-link"></span></a>Computing the Information Bottleneck<a class="anchor-link" href="#Computing-the-Information-Bottleneck"> </a>
 </h2>
 </div>
 </div>
@@ -226,7 +232,7 @@ window.onload = wrap_img;
         theme="github-light"
         crossorigin="anonymous"
         async>
-</script><a class="u-url" href="/tutorial/turing%20machines/recurrent%20neural%20networks/2020/11/21/turingcompletenessRNN.html" hidden></a>
+</script><a class="u-url" href="/tutorial/blahut-arimoto/rate%20distortion%20theory/channel%20capacity/optimization/2020/11/15/blahut_arimoto.html" hidden></a>
 </article>
       </div>
     </main><footer class="site-footer h-card">
