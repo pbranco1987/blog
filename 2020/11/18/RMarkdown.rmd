@@ -3,6 +3,14 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
 ```{r}
+x_var <- seq(from = 0, to = 10, by = 0.1)
+y_var <- 3.21*x_var - 10
+df <- data.frame(x_var,y_var)
+library(ggplot2)
+ggplot(df, aes(x=x_var, y=y_var)) + geom_smooth()
+```
+
+```{r}
 plot(cars)
 ```
 
